@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin'])) {
 $servername = "localhost";
 $db_username = "root";
 $db_password = "";
-$dbname = "travel_plan_db";
+$dbname = "travel";
 
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$sql = "SELECT username, email FROM users WHERE id='$user_id'";
+$sql = "SELECT name, email FROM user WHERE id='$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 ?>
