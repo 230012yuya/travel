@@ -12,15 +12,15 @@ if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-$user = $_POST['username'];
+$user = $_POST['name'];
 $email = $_POST['email'];
 $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO users (username, email, password) VALUES ('$user', '$email', '$pass')";
+$sql = "INSERT INTO user (name, email, password) VALUES ('$user', '$email', '$pass')";
 
 if ($conn->query($sql) === TRUE) {
     $_SESSION['loggedin'] = true;
-    $_SESSION['username'] = $user;
+    $_SESSION['name'] = $user;
     header("Location: home.php");
 } else {
     echo "エラー: " . $sql . "<br>" . $conn->error;
