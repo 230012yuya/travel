@@ -36,4 +36,4 @@ if (!isset($_SESSION['loggedin'])) {
             <input type="date" id="start_date" name="start_date" required>
             
             <label for="end_date">終了日:</label>
-            <input type="date" id="end_date" name="end_date" required
+            <input type="date" id="end_date" name="end_date" required>
