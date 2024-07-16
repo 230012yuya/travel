@@ -37,3 +37,12 @@ if (!isset($_SESSION['loggedin'])) {
             
             <label for="end_date">終了日:</label>
             <input type="date" id="end_date" name="end_date" required>
+            
+            <label for="details">詳細:</label>
+            <textarea id="details" name="details" required></textarea>
+            
+            <button type="submit">作成</button>
+        </form>
+    </main>
+</body>
+</html>
