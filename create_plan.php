@@ -13,12 +13,37 @@ if (!isset($_SESSION['loggedin'])) {
     <title>旅行プラン作成</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .form-row:nth-child(odd) {
-            background-color: #f2f2f2; /* 明るい灰色 */
+        body {
+            position: relative; /* ボディに対して相対的な位置指定を行う */
         }
-        .form-row:nth-child(even) {
-            background-color: #e6e6e6; /* 少し濃い灰色 */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            z-index: 1000; /* 必要に応じて調整 */
         }
+        .home-button img {
+            width: 80%;
+            height: auto;
+        }
+        
+        .form-container {
+            margin-top: 100px; /* ホームボタンの分だけ下にずらす */
+            padding: 20px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+        }
+        
         .form-row {
             padding: 10px;
             margin-bottom: 5px;
@@ -30,19 +55,11 @@ if (!isset($_SESSION['loggedin'])) {
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="home.php">ホーム</a></li>
-                <li><a href="create_plan.php">旅行プラン作成</a></li>
-                <li><a href="view_plans.php">旅行プラン表示</a></li>
-                <li><a href="profile.php">プロフィール</a></li>
-                <li><a href="past_plans.php">過去の旅行プラン</a></li>
-                <li><a href="logout.php">ログアウト</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+    <a class="home-button" href="home.php">
+        <img src="path/to/your/home_icon.png" alt="ホーム">
+    </a>
+    
+    <div class="form-container">
         <h1>旅行プラン作成</h1>
         <form action="save_plan.php" method="post">
             <div class="form-row">
@@ -84,6 +101,6 @@ if (!isset($_SESSION['loggedin'])) {
             
             <button type="submit">作成</button>
         </form>
-    </main>
+    </div>
 </body>
 </html>
