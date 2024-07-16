@@ -1,1 +1,4 @@
-<?php aa ?>
+<?php
+header("Location: login.php");
+exit;
+?>
