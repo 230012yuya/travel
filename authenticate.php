@@ -12,17 +12,17 @@ if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-$user = $_POST['username'];
+$user = $_POST['name'];
 $pass = $_POST['password'];
 
-$sql = "SELECT * FROM users WHERE username='$user'";
+$sql = "SELECT * FROM user WHERE name='$user'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if (password_verify($pass, $row['password'])) {
         $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $user;
+        $_SESSION['name'] = $user;
         header("Location: home.php");
         exit;
     } else {

@@ -10,8 +10,8 @@
     <div class="container">
         <h2>ログイン</h2>
         <form action="authenticate.php" method="post">
-            <label for="username">ユーザー名:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="name">ユーザー名:</label>
+            <input type="text" id="name" name="name" required>
             
             <label for="password">パスワード:</label>
             <input type="password" id="password" name="password" required>
