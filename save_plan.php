@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin'])) {
 $servername = "localhost";
 $db_username = "root";
 $db_password = "";
-$dbname = "plans";
+$dbname = "travel";
 
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 
