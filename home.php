@@ -88,7 +88,7 @@ if ($conn->connect_error) {
             <button type="submit">検索</button>
         </form>
         <button onclick="window.location.href='create_plan.php'">新しいプランを作成する</button>
-        <button onclick="window.location.href='past_plans.php'">過去の旅行プランを見る</button>
+        <button onclick="window.location.href='view_plans.php'">過去の旅行プランを見る</button>
     </main>
     <script>
         function myFunction() {
