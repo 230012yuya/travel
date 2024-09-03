@@ -156,7 +156,7 @@ $user = $result->fetch_assoc();
         
         <!-- ユーザーアイコンと名前の表示 -->
         <div class="profile-header">
-            <img src="uploads/default.png" alt="プロフィール画像" class="profile-image">
+            <img src="uploads/default.png" alt="" class="profile-image">
             <h2><?php echo $user['name']; ?></h2>
         </div>
 
