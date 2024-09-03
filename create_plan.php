@@ -14,7 +14,8 @@ if (!isset($_SESSION['loggedin'])) {
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            position: relative; /* ボディに対して相対的な位置指定を行う */
+            position: relative;/* ボディに対して相対的な位置指定を行う */
+            font-family: Arial, sans-serif; 
         }
         .home-button {
             position: fixed;
@@ -52,13 +53,63 @@ if (!isset($_SESSION['loggedin'])) {
         .form-row textarea {
             width: calc(100% - 20px); /* 余白を含む */
         }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar .icon {
+            display: none;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        @media screen and (max-width: 600px) {
+            .navbar a:not(:first-child) {display: none;}
+            .navbar a.icon {
+                float: right;
+                display: block;
+            }
+        }
+        @media screen and (max-width: 600px) {
+            .navbar.responsive {position: relative;}
+            .navbar.responsive .icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            .navbar.responsive a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body>
-    <a class="home-button" href="home.php">
-        <img src="path/to/your/home_icon.png" alt="ホーム">
-    </a>
-    
+    <div class="navbar" id="myNavbar">
+        <a href="home.php">ホーム</a>
+        <a href="create_plan.php">旅行プラン作成</a>
+        <a href="view_plans.php">旅行プラン表示</a>
+        <a href="profile.php">プロフィール</a>
+        <a href="view_plans.php">過去の旅行プラン</a>
+        <a href="logout.php">ログアウト</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            &#9776;
+        </a>
+    </div>
+
     <div class="form-container">
         <h1>旅行プラン作成</h1>
         <form action="save_plan.php" method="post">
