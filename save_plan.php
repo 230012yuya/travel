@@ -17,12 +17,15 @@ if ($conn->connect_error) {
 }
 
 $user_id = $_SESSION['user_id']; // これを取得するために、ログイン時にユーザーIDもセッションに保存する必要があります
+$departure_point = $_POST['departure_point'];
 $destination = $_POST['destination'];
 $start_date = $_POST['start_date'];
 $end_date = $_POST['end_date'];
+$number_of_people = $_POST['number_of_people'];
+$budget = $_POST['budget'];
 $details = $_POST['details'];
 
-$sql = "INSERT INTO plans (user_id, destination, start_date, end_date, details) VALUES ('$user_id', '$destination', '$start_date', '$end_date', '$details')";
+$sql = "INSERT INTO plans (user_id, departure_point, destination, start_date, end_date, number_of_people,budget, details) VALUES ('$user_id', '$departure_point','$destination', '$start_date', '$end_date', '$number_of_people', '$budget', '$details')";
 
 if ($conn->query($sql) === TRUE) {
     header("Location: view_plans.php");
