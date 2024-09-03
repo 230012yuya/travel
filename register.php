@@ -72,8 +72,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h2>ユーザー登録フォーム</h2>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-        <label>ユーザー名</label><br>
+    <form action="register_process.php" method="post" enctype="multipart/form-data">
+    <label>ユーザー名</label><br>
         <input type="text" name="username" required><br><br>
 
         <label>Eメール</label><br>

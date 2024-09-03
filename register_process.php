@@ -6,7 +6,7 @@ $db_username = "root";
 $db_password = "";
 $dbname = "travel";
 
-$conn = new mysqli($user, $db_username, $db_password, $dbname);
+$conn = new mysqli($servername, $db_username, $db_password, $dbname);
 
 if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
