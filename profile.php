@@ -145,7 +145,7 @@ $user = $result->fetch_assoc();
         <a href="create_plan.php">旅行プラン作成</a>
         <a href="view_plans.php">旅行プラン表示</a>
         <a href="profile.php">プロフィール</a>
-        <a href="past_plans.php">過去の旅行プラン</a>
+        <a href="view_plans.php">過去の旅行プラン</a>
         <a href="logout.php">ログアウト</a>
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
             &#9776;
