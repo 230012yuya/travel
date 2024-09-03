@@ -4,11 +4,10 @@ require_once 'setting.php';
 // クライアントIDとクライアントシークレット
 $client_id = GOOGLE_CLIENT_ID;
 $client_secret = GOOGLE_CLIENT_SECRET;
-$redirect_uri = 'https://example.com/login/travel/';
+$redirect_uri = GOOGLE_REDIRECT_URI;
 
 // 認証コードがリクエストされたか確認
 if (isset($_GET['code'])) {
-    // セッションを開始していた場合はセッションを再開
     session_start();
 
     // CSRF対策の状態を確認
