@@ -54,3 +54,97 @@ form button {
 form button:hover {
     background-color: #0056b3;
 }
+
+/*松木↓*/
+/* ベーススタイル */
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('background.jpg'); /* 旅行風景の画像を使用 */
+    background-size: cover;
+    background-position: center;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* コンテナスタイル */
+.container {
+    background: rgba(255, 255, 255, 0.8); /* 背景に透明感を持たせる */
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* タイトル */
+h2 {
+    font-size: 24px;
+    color: #007BFF; /* 青いカラーで旅行の爽快感を表現 */
+}
+
+/* フォーム要素 */
+label {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: left;
+    color: #555;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* ボタンスタイル */
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #007BFF; /* ボタンの青いカラー */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* ホバー時の色変更 */
+}
+
+/* Googleログインリンク */
+.google-login {
+    display: block;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #DB4437; /* Googleのテーマカラー */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.google-login:hover {
+    background-color: #C23321; /* ホバー時の色変更 */
+}
+
+/* リンクスタイル */
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

@@ -21,9 +21,8 @@
         <p>アカウントをお持ちでない方は <a href="register.php">こちら</a> から登録してください。</p>
         <!-- Googleログインボタン -->
         <div>
-            <a href="google_login.php">Googleでログイン</a>
+            <a href="google_login.php" class="google-login">Googleでログイン</a>
         </div>
-
     </div>
 </body>
 </html>
