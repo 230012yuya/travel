@@ -164,7 +164,7 @@ $user = $result->fetch_assoc();
             <label for="name">ユーザー名:</label>
             <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
             
-            <label for="email">メールアドレス:</label>
+            <label for="email">自己紹介文:</label>
             <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
             
             <button type="submit">更新</button>
