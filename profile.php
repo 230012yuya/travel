@@ -145,7 +145,7 @@ $user = $result->fetch_assoc();
         <a href="create_plan.php">旅行プラン作成</a>
         <a href="view_plans.php">旅行プラン表示</a>
         <a href="profile.php">プロフィール</a>
-        <a href="past_plans.php">過去の旅行プラン</a>
+        <a href="view_plans.php">過去の旅行プラン</a>
         <a href="logout.php">ログアウト</a>
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
             &#9776;
@@ -156,7 +156,7 @@ $user = $result->fetch_assoc();
         
         <!-- ユーザーアイコンと名前の表示 -->
         <div class="profile-header">
-            <img src="uploads/default.png" alt="プロフィール画像" class="profile-image">
+            <img src="uploads/default.png" alt="" class="profile-image">
             <h2><?php echo $user['name']; ?></h2>
         </div>
 
@@ -164,7 +164,7 @@ $user = $result->fetch_assoc();
             <label for="name">ユーザー名:</label>
             <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
             
-            <label for="email">メールアドレス:</label>
+            <label for="email">自己紹介文:</label>
             <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
             
             <button type="submit">更新</button>
