@@ -18,12 +18,12 @@
             
             <button type="submit">ログイン</button>
         </form>
-        <p>または</p>
-        <!-- Googleログインボタン -->
-        <a href="google_auth.php">
-            <button type="button">Googleでログイン</button>
-        </a>
         <p>アカウントをお持ちでない方は <a href="register.php">こちら</a> から登録してください。</p>
+        <!-- Googleログインボタン -->
+        <div>
+            <a href="google_login.php">Googleでログイン</a>
+        </div>
+
     </div>
 </body>
 </html>

@@ -1,10 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION['loggedin'])) {
+
+// ログインしていない場合、ログインページにリダイレクト
+if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
     header("Location: login.php");
     exit;
 }
 
+// データベース接続設定
 $servername = "localhost";
 $db_username = "root";
 $db_password = "";
@@ -12,10 +15,10 @@ $dbname = "travel";
 
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 
+// データベース接続エラー処理
 if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
