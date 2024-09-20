@@ -1,25 +1,3 @@
-<?php
-session_start();
-
-// ログインしていない場合、ログインページにリダイレクト
-if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
-    header("Location: login.php");
-    exit;
-}
-
-// データベース接続設定
-$servername = "localhost";
-$db_username = "root";
-$db_password = "";
-$dbname = "travel";
-
-$conn = new mysqli($servername, $db_username, $db_password, $dbname);
-
-// データベース接続エラー処理
-if ($conn->connect_error) {
-    die("接続失敗: " . $conn->connect_error);
-}
-?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -29,36 +7,56 @@ if ($conn->connect_error) {
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('your-image.jpg'); /* 画像を指定 */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* スクロール時に背景を固定 */
+            color: #333;
         }
+
         .navbar {
             overflow: hidden;
-            background-color: #333;
+            background-color: rgba(51, 51, 51, 0.9); /* 半透明の背景色 */
+            padding: 0 15px;
         }
+
         .navbar a {
             float: left;
             display: block;
             color: white;
             text-align: center;
-            padding: 14px 16px;
+            padding: 14px 20px;
             text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s;
         }
+
+        .navbar a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
         .navbar .icon {
             display: none;
         }
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
+
         @media screen and (max-width: 600px) {
-            .navbar a:not(:first-child) {display: none;}
+            .navbar a:not(:first-child) {
+                display: none;
+            }
             .navbar a.icon {
                 float: right;
                 display: block;
             }
         }
+
         @media screen and (max-width: 600px) {
-            .navbar.responsive {position: relative;}
+            .navbar.responsive {
+                position: relative;
+            }
             .navbar.responsive .icon {
                 position: absolute;
                 right: 0;
@@ -68,6 +66,64 @@ if ($conn->connect_error) {
                 float: none;
                 display: block;
                 text-align: left;
+            }
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* 半透明の背景 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 120px);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5a67d8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #434190;
+        }
+
+        button:active {
+            background-color: #3730a3;
+        }
+
+        .navbar button {
+            background-color: transparent;
+            border: none;
+            color: white;
+        }
+
+        @media screen and (max-width: 768px) {
+            input[type="text"] {
+                width: calc(100% - 140px);
             }
         }
     </style>
@@ -84,6 +140,7 @@ if ($conn->connect_error) {
             &#9776;
         </a>
     </div>
+    
     <main>
         <h1>ホーム</h1>
         <form action="search_results.php" method="post">
@@ -93,6 +150,7 @@ if ($conn->connect_error) {
         <button onclick="window.location.href='create_plan.php'">新しいプランを作成する</button>
         <button onclick="window.location.href='view_plans.php'">過去の旅行プランを見る</button>
     </main>
+
     <script>
         function myFunction() {
             var x = document.getElementById("myNavbar");
