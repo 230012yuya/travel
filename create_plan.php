@@ -5,6 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>旅行プラン作成</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f9ff; /* 柔らかいパステルブルー */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: rgba(50, 50, 70, 0.9); /* 少し濃い目の背景 */
+            padding: 0 15px;
+            font-size: 18px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #ffb6b9; /* 柔らかいピンク */
+            color: #fff;
+            transform: scale(1.05); /* ホバー時の動き */
+        }
+
+        /* Traveeelタイトル */
+    .title {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 50px;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bc9ff);
+        -webkit-background-clip: text;
+        color: transparent;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
+
+    .title:hover {
+        transform: scale(1.1) rotate(5deg);
+        text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.7); /* 影を強調 */
+    }
+
+
+        main {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9); /* 半透明の背景 */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b; /* カラフルな赤 */
+            font-size: 28px; /* タイトルサイズ */
+            margin-bottom: 30px;
+        }
+
+        ul {
+            list-style-type: none; /* リストのスタイルをなしに */
+            padding: 0;
+        }
+
+        li {
+            background-color: #e3f2fd; /* 各プランの背景色 */
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        li:hover {
+            transform: scale(1.02); /* ホバー時に少し拡大 */
+        }
+
+    </style>
 </head>
 <body style="font-family: 'Roboto', sans-serif; margin: 0; padding: 0; background-color: #f0f9ff; color: #333; display: flex; flex-direction: column; min-height: 100vh;">
 
