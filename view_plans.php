@@ -16,57 +16,109 @@ if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-$user_id = $_SESSION['user_id']; // これを取得するために、ログイン時にユーザーIDもセッションに保存する必要があります
+$user_id = $_SESSION['user_id'];
 $sql = "SELECT id, destination, start_date, end_date FROM plans WHERE user_id='$user_id'";
 $result = $conn->query($sql);
-
 ?>
 
-<style>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行プラン表示</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f9ff; /* 柔らかいパステルブルー */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
+
         .navbar {
             overflow: hidden;
-            background-color: #333;
+            background-color: rgba(50, 50, 70, 0.9); /* 少し濃い目の背景 */
+            padding: 0 15px;
+            font-size: 18px;
         }
+
         .navbar a {
             float: left;
             display: block;
             color: white;
             text-align: center;
-            padding: 14px 16px;
+            padding: 14px 20px;
             text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
-        .navbar .icon {
-            display: none;
-        }
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        @media screen and (max-width: 600px) {
-            .navbar a:not(:first-child) {display: none;}
-            .navbar a.icon {
-                float: right;
-                display: block;
-            }
-        }
-        @media screen and (max-width: 600px) {
-            .navbar.responsive {position: relative;}
-            .navbar.responsive .icon {
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-            .navbar.responsive a {
-                float: none;
-                display: block;
-                text-align: left;
-            }
-        }
-    </style>
 
+        .navbar a:hover {
+            background-color: #ffb6b9; /* 柔らかいピンク */
+            color: #fff;
+            transform: scale(1.05); /* ホバー時の動き */
+        }
+
+        /* Traveeelタイトル */
+        .title {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 50px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bc9ff);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .title:hover {
+            transform: scale(1.1) rotate(5deg);
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* 半透明の背景 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b; /* カラフルな赤 */
+            font-size: 28px; /* タイトルサイズ */
+            margin-bottom: 30px;
+        }
+
+        ul {
+            list-style-type: none; /* リストのスタイルをなしに */
+            padding: 0;
+        }
+
+        li {
+            background-color: #e3f2fd; /* 各プランの背景色 */
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        li:hover {
+            transform: scale(1.02); /* ホバー時に少し拡大 */
+        }
+
+    </style>
+</head>
+<body>
     <div class="navbar" id="myNavbar">
         <a href="home.php">ホーム</a>
         <a href="create_plan.php">旅行プラン作成</a>
@@ -75,19 +127,11 @@ $result = $conn->query($sql);
         <a href="view_plans.php">過去の旅行プラン</a>
         <!-- ログアウトボタン -->
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-            &#9776;
-        </a>
     </div>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>旅行プラン表示</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+
+    <!-- Traveeelのタイトル -->
+    <div class="title">Traveeel</div>
+
     <main>
         <h1>旅行プラン表示</h1>
         <ul>
@@ -97,22 +141,14 @@ $result = $conn->query($sql);
                     echo "<li>" . $row["destination"] . " (" . $row["start_date"] . " - " . $row["end_date"] . ")</li>";
                 }
             } else {
-                echo "旅行プランが見つかりませんでした";
+                echo "<li>旅行プランが見つかりませんでした</li>";
             }
             $conn->close();
             ?>
         </ul>
     </main>
+    
     <script>
-        function myFunction() {
-            var x = document.getElementById("myNavbar");
-            if (x.className === "navbar") {
-                x.className += " responsive";
-            } else {
-                x.className = "navbar";
-            }
-        }
-
         // ログアウト確認ダイアログ
         function confirmLogout() {
             var confirmation = confirm("本当にログアウトしますか？");
