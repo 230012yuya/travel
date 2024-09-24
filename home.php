@@ -57,7 +57,6 @@
 
         .title:hover {
             transform: scale(1.1) rotate(5deg);
-            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         main {
