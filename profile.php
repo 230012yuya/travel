@@ -146,7 +146,8 @@ $user = $result->fetch_assoc();
         <a href="view_plans.php">旅行プラン表示</a>
         <a href="profile.php">プロフィール</a>
         <a href="view_plans.php">過去の旅行プラン</a>
-        <a href="logout.php">ログアウト</a>
+        <!-- ログアウトボタン -->
+        <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
             &#9776;
         </a>
@@ -170,6 +171,24 @@ $user = $result->fetch_assoc();
             <button type="submit">更新</button>
         </form>
     </main>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myNavbar");
+            if (x.className === "navbar") {
+                x.className += " responsive";
+            } else {
+                x.className = "navbar";
+            }
+        }
+
+        // ログアウト確認ダイアログ
+        function confirmLogout() {
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php"; // OKが押された場合はログアウト
+            }
+        }
+    </script>
 </body>
 </html>
 <?php
