@@ -10,6 +10,7 @@ $db_username = "root";
 $db_password = "";
 $dbname = "travel";
 
+// データベース接続
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 
 if ($conn->connect_error) {
@@ -20,17 +21,47 @@ $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
-    $email = $_POST['email'];
+    $bio = $_POST['bio'];
 
-    $sql = "UPDATE user SET name='$name', email='$email' WHERE id='$user_id'";
+    // プロフィール画像のアップロード処理
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['profile_image']['tmp_name'];
+        $fileName = $_FILES['profile_image']['name'];
+        $fileSize = $_FILES['profile_image']['size'];
+        $fileType = $_FILES['profile_image']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+
+        $allowedfileExtensions = array('jpg', 'png', 'jpeg', 'gif');
+        if (in_array($fileExtension, $allowedfileExtensions)) {
+            $uploadFileDir = './uploads/';
+            $newFileName = $user_id . '.' . $fileExtension; // ユーザーIDを使ってユニークなファイル名に
+            $dest_path = $uploadFileDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                // データベースに画像パスを保存
+                $profile_image_path = $newFileName;
+                $sql = "UPDATE user SET name='$name', bio='$bio', profile_image='$profile_image_path' WHERE id='$user_id'";
+            } else {
+                echo 'ファイルのアップロードに失敗しました。';
+            }
+        } else {
+            echo 'アップロード可能なファイル形式は、JPG, PNG, JPEG, GIF です。';
+        }
+    } else {
+        // プロフィール画像の変更がなかった場合
+        $sql = "UPDATE user SET name='$name', bio='$bio' WHERE id='$user_id'";
+    }
+
     if ($conn->query($sql) === TRUE) {
-        echo "プロフィールが更新されました";
+        echo "<script>alert('プロフィールが更新されました');</script>";
     } else {
         echo "エラー: " . $sql . "<br>" . $conn->error;
     }
 }
 
-$sql = "SELECT name, email FROM user WHERE id='$user_id'";
+// ユーザー情報をデータベースから取得
+$sql = "SELECT name, bio, profile_image FROM user WHERE id='$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 ?>
@@ -123,7 +154,7 @@ $user = $result->fetch_assoc();
         }
 
         input[type="text"],
-        input[type="email"] {
+        textarea {
             padding: 12px;
             font-size: 16px;
             border: 1px solid #ffb6b9; /* カラフルなピンク */
@@ -134,7 +165,7 @@ $user = $result->fetch_assoc();
         }
 
         input[type="text"]:focus,
-        input[type="email"]:focus {
+        textarea:focus {
             border-color: #ff6b6b; /* カラフルな赤 */
         }
 
@@ -162,67 +193,84 @@ $user = $result->fetch_assoc();
         }
 
         /* プロフィール画像のスタイル */
-        .profile-image {
+        .profile-image-wrapper {
+            position: relative;
             width: 120px; /* 大きさを調整 */
             height: 120px; /* 大きさを調整 */
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            object-fit: cover; /* 画像が切り取られるのを防ぐ */
             margin-bottom: 15px;
-            display: block;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* ユーザー名を中央に配置 */
-        .profile-header {
-            text-align: center;
+        .profile-image {
+            width: 100%; /* 大きさを調整 */
+            height: 100%; /* 大きさを調整 */
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            object-fit: cover; /* 画像が切り取られるのを防ぐ */
+            cursor: pointer; /* クリック可能であることを示す */
+        }
+
+        #profileImageInput {
+            display: none; /* 隠しフィールド */
+        }
+
+        .profile-image-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer; /* クリック可能であることを示す */
         }
     </style>
 </head>
 <body>
 
-    <div class="navbar" id="myNavbar">
-        <a href="home.php">ホーム</a>
-        <a href="create_plan.php">旅行プラン作成</a>
-        <a href="view_plans.php">旅行プラン表示</a>
-        <a href="profile.php">プロフィール</a>
-        <a href="view_plans.php">過去の旅行プラン</a>
-        <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
+<div class="navbar" id="myNavbar">
+    <a href="home.php">ホーム</a>
+    <a href="create_plan.php">旅行プラン作成</a>
+    <a href="view_plans.php">旅行プラン表示</a>
+    <a href="profile.php">プロフィール</a>
+    <a href="view_plans.php">過去の旅行プラン</a>
+    <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
+</div>
+
+<!-- Traveeelのタイトル -->
+<div class="title">Traveeel</div>
+
+<main>
+    <h1>プロフィール</h1>
+    
+    <!-- ユーザーアイコンと名前の表示 -->
+    <div class="profile-header">
+        <div class="profile-image-wrapper">
+            <img src="uploads/<?php echo !empty($user['profile_image']) ? $user['profile_image'] : 'default.png'; ?>" alt="プロフィール画像" class="profile-image" id="profileImage">
+            <label for="profileImageInput" class="profile-image-label"></label>
+            <input type="file" name="profile_image" id="profileImageInput" accept="image/*" onchange="document.getElementById('profileImage').src = window.URL.createObjectURL(this.files[0]);">
+        </div>
+        <h2><?php echo $user['name']; ?></h2>
     </div>
 
-    <!-- Traveeelのタイトル -->
-    <div class="title">Traveeel</div>
-
-    <main>
-        <h1>プロフィール</h1>
+    <form action="profile.php" method="post" enctype="multipart/form-data">
+        <label for="name">ユーザー名:</label>
+        <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
         
-        <!-- ユーザーアイコンと名前の表示 -->
-        <div class="profile-header">
-            <img src="uploads/default.png" alt="" class="profile-image">
-            <h2><?php echo $user['name']; ?></h2>
-        </div>
+        <label for="bio">自己紹介文:</label>
+        <textarea id="bio" name="bio" required><?php echo $user['bio']; ?></textarea>
+        
+        <button type="submit" onclick="return confirm('本当に更新しますか？');">更新</button>
+    </form>
+</main>
 
-        <form action="profile.php" method="post">
-            <label for="name">ユーザー名:</label>
-            <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
-            
-            <label for="email">自己紹介文:</label>
-            <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
-            
-            <button type="submit">更新</button>
-        </form>
-    </main>
+<script>
+function confirmLogout() {
+    if (confirm("本当にログアウトしますか？")) {
+        window.location.href = "logout.php";
+    }
+}
+</script>
 
-    <script>
-        // ログアウト確認ダイアログ
-        function confirmLogout() {
-            var confirmation = confirm("本当にログアウトしますか？");
-            if (confirmation) {
-                window.location.href = "logout.php"; // OKが押された場合はログアウト
-            }
-        }
-    </script>
 </body>
 </html>
 <?php
