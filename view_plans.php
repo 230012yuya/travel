@@ -135,13 +135,13 @@ $result = $conn->query($sql);
         <h1>旅行プラン表示</h1>
         <ul>
             <?php
-            $sql = "SELECT id, start_date, end_date FROM plans WHERE user_id='$user_id'";
+            $sql = "SELECT id, created_at, destination,start_date, end_date FROM plans WHERE user_id='$user_id'";
             $result = $conn->query($sql);
             
             if ($result->num_rows > 0) {
                 // プラン情報を表示するループ
                 while ($row = $result->fetch_assoc()) {
-                    echo "<li>" . $row['start_date'] . " ~ " . $row['end_date'] . "</li>";
+                    echo "<li>作成日　　:" . $row['created_at'] . " <br>目的地　　: " . $row['destination'] . " <br>旅行日程　: " . $row['start_date'] . " ~ " . $row['end_date'] . "</li>";
                     
                     // ここに詳細リンクを追加
                     echo "<a href='plan_detail.php?plan_id=" . $row['id'] . "'>詳細を見る</a>";
