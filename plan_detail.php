@@ -146,15 +146,17 @@ if (isset($_GET['plan_id'])) {
     <!-- Traveeelのタイトル -->
     <div class="title">Traveeel</div>
     <div class="plan-detail">
-        <h1>プラン詳細</h1>
-        <p>出発地点: <?php echo $plan['departure_point']; ?></p>
-        <p>目的地: <?php echo $plan['destination']; ?></p>
-        <p>出発日: <?php echo $plan['start_date']; ?></p>
-        <p>帰着日: <?php echo $plan['end_date']; ?></p>
-        <p>人数: <?php echo $plan['number_of_people']; ?>人</p>
-        <p>予算: <?php echo $plan['budget']; ?>円</p>
-        <p>詳細: <?php echo $plan['details']; ?></p>
-        <a href="view_plans.php">戻る</a>
+    <h1>プラン詳細</h1>
+    <p>出発地点: <?php echo $plan['departure_point']; ?></p>
+    <p>目的地: <?php echo $plan['destination']; ?></p>
+    <p>出発日: <?php echo $plan['start_date']; ?></p>
+    <p>帰着日: <?php echo $plan['end_date']; ?></p>
+    <p>人数: <?php echo $plan['number_of_people']; ?>人</p>
+    <p>予算: <?php echo $plan['budget']; ?>円</p>
+    <p>詳細: <?php echo $plan['details']; ?></p>
+    <!-- 編集ボタンの追加 -->
+    <a href="edit_plan.php?plan_id=<?php echo $plan['id']; ?>">編集する</a>
+    <a href="view_plans.php">戻る</a>
     </div>
 </body>
 </html>

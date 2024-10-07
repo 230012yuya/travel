@@ -101,6 +101,10 @@ $result = $conn->query($sql);
         ul {
             list-style-type: none; /* リストのスタイルをなしに */
             padding: 0;
+            max-height: 400px; /* 最大の高さを設定（必要に応じて調整） */
+            overflow-y: auto; /* 縦方向のスクロールを有効に */
+            border: 1px solid #ddd; /* 境界線を追加 */
+            border-radius: 5px; /* 角を丸める */
         }
 
         li {
@@ -114,7 +118,6 @@ $result = $conn->query($sql);
         li:hover {
             transform: scale(1.02); /* ホバー時に少し拡大 */
         }
-
     </style>
 </head>
 <body>
@@ -135,7 +138,7 @@ $result = $conn->query($sql);
         <h1>旅行プラン表示</h1>
         <ul>
             <?php
-            $sql = "SELECT id, created_at, destination,start_date, end_date FROM plans WHERE user_id='$user_id'";
+            $sql = "SELECT id, created_at, destination, start_date, end_date FROM plans WHERE user_id='$user_id'";
             $result = $conn->query($sql);
             
             if ($result->num_rows > 0) {
