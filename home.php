@@ -129,7 +129,7 @@
     <div class="navbar" id="myNavbar">
         <a href="home.php">ホーム</a>
         <a href="create_plan.php">旅行プラン作成</a>
-        <a href="view_plans.php">旅行プラン表示</a>
+        <a href="display.php">旅行プラン表示</a>
         <a href="profile.php">プロフィール</a>
         <a href="view_plans.php">過去の旅行プラン</a>
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
