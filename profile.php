@@ -10,7 +10,6 @@ $db_username = "root";
 $db_password = "";
 $dbname = "travel";
 
-// データベース接続
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 
 if ($conn->connect_error) {
@@ -19,52 +18,19 @@ if ($conn->connect_error) {
 
 $user_id = $_SESSION['user_id'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'];
-    $bio = $_POST['bio'];
+// お気に入りを取得するクエリ（3つまで）
+$sql_favorites = "SELECT plans.destination, plans.start_date, plans.end_date FROM user_favorites 
+                  JOIN plans ON user_favorites.plan_id = plans.id 
+                  WHERE user_favorites.user_id = '$user_id'
+                  LIMIT 3";
+$favorites_result = $conn->query($sql_favorites);
 
-    // プロフィール画像のアップロード処理
-    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['profile_image']['tmp_name'];
-        $fileName = $_FILES['profile_image']['name'];
-        $fileSize = $_FILES['profile_image']['size'];
-        $fileType = $_FILES['profile_image']['type'];
-        $fileNameCmps = explode(".", $fileName);
-        $fileExtension = strtolower(end($fileNameCmps));
-
-        $allowedfileExtensions = array('jpg', 'png', 'jpeg', 'gif');
-        if (in_array($fileExtension, $allowedfileExtensions)) {
-            $uploadFileDir = './uploads/';
-            $newFileName = $user_id . '.' . $fileExtension; // ユーザーIDを使ってユニークなファイル名に
-            $dest_path = $uploadFileDir . $newFileName;
-
-            if (move_uploaded_file($fileTmpPath, $dest_path)) {
-                // データベースに画像パスを保存
-                $profile_image_path = $newFileName;
-                $sql = "UPDATE user SET name='$name', bio='$bio', profile_image='$profile_image_path' WHERE id='$user_id'";
-            } else {
-                echo 'ファイルのアップロードに失敗しました。';
-            }
-        } else {
-            echo 'アップロード可能なファイル形式は、JPG, PNG, JPEG, GIF です。';
-        }
-    } else {
-        // プロフィール画像の変更がなかった場合
-        $sql = "UPDATE user SET name='$name', bio='$bio' WHERE id='$user_id'";
-    }
-
-    if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('プロフィールが更新されました');</script>";
-    } else {
-        echo "エラー: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-// ユーザー情報をデータベースから取得
-$sql = "SELECT name, bio, profile_image FROM user WHERE id='$user_id'";
-$result = $conn->query($sql);
-$user = $result->fetch_assoc();
+// ユーザー情報を取得
+$sql_user = "SELECT name, bio, profile_image FROM user WHERE id='$user_id'";
+$user_result = $conn->query($sql_user);
+$user = $user_result->fetch_assoc();
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -153,20 +119,13 @@ $user = $result->fetch_assoc();
             color: #333;
         }
 
-        input[type="text"],
-        textarea {
+        select {
             padding: 12px;
             font-size: 16px;
             border: 1px solid #ffb6b9; /* カラフルなピンク */
             border-radius: 5px;
             background-color: #f9f9f9;
             margin-bottom: 20px;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus,
-        textarea:focus {
-            border-color: #ff6b6b; /* カラフルな赤 */
         }
 
         button {
@@ -241,7 +200,7 @@ $user = $result->fetch_assoc();
 
 <main>
     <h1>プロフィール</h1>
-    
+
     <!-- ユーザーアイコンと名前の表示 -->
     <div class="profile-header">
         <div class="profile-image-wrapper">
@@ -252,14 +211,23 @@ $user = $result->fetch_assoc();
         <h2><?php echo $user['name']; ?></h2>
     </div>
 
+    <!-- お気に入りのプラン表示部分 -->
+    <h2>お気に入りのプラン</h2>
+    <ul>
+        <?php while ($row = $favorites_result->fetch_assoc()) { ?>
+            <li><?php echo $row['destination'] . " - " . $row['start_date'] . " 〜 " . $row['end_date']; ?></li>
+        <?php } ?>
+    </ul>
+
+    <!-- プロフィール更新フォーム -->
     <form action="profile.php" method="post" enctype="multipart/form-data">
         <label for="name">ユーザー名:</label>
         <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
         
         <label for="bio">自己紹介文:</label>
         <textarea id="bio" name="bio" required><?php echo $user['bio']; ?></textarea>
-        
-        <button type="submit" onclick="return confirm('本当に更新しますか？');">更新</button>
+
+        <button type="submit">更新</button>
     </form>
 </main>
 
@@ -274,5 +242,5 @@ function confirmLogout() {
 </body>
 </html>
 <?php
-$conn->close();
+$conn->close(); 
 ?>
