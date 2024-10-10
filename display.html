@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行プラン詳細</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f9ff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: rgba(50, 50, 70, 0.9);
+            padding: 0 15px;
+            font-size: 18px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #ffb6b9;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .title {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 50px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bc9ff);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .title:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .plan {
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .plan:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .plan p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .details {
+            margin-top: 20px;
+        }
+
+        .details p {
+            margin: 8px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ffd93d;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            background-color: #ff6b6b;
+            transform: scale(1.02);
+        }
+
+        .back-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="home.php">ホーム</a>
+    <a href="create_plan.php">旅行プラン作成</a>
+    <a href="display.php">旅行プラン表示</a>
+    <a href="profile.php">プロフィール</a>
+    <a href="view_plans.php">過去の旅行プラン</a>
+</div>
+
+<!-- Traveeelのタイトル -->
+<div class="title">Traveeel</div>
+
+<main>
+    <h1>東京への旅行プラン</h1>
+
+    <!-- 旅行プランの基本情報 -->
+    <div class="plan">
+        <h2>目的地: 東京</h2>
+        <p>開始日: 2024年11月10日</p>
+        <p>終了日: 2024年11月15日</p>
+    </div>
+
+    <!-- 旅行プランの詳細情報 -->
+    <div class="details">
+        <h2>旅行プランの詳細</h2>
+        <p><strong>予算:</strong> ¥150,000</p>
+        <p><strong>宿泊施設:</strong> 東京ステーションホテル</p>
+        <p><strong>交通手段:</strong> 新幹線、公共交通機関</p>
+        <p><strong>アクティビティ:</strong></p>
+        <ul>
+            <li>浅草観光</li>
+            <li>スカイツリー訪問</li>
+            <li>お台場でのショッピング</li>
+        </ul>
+        <p><strong>メモ:</strong> 観光スポットは早めに予約を取ることをお勧めします。</p>
+    </div>
+
+    <!-- 戻るボタン -->
+    <div class="back-button">
+        <button onclick="window.history.back()">戻る</button>
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -151,23 +151,24 @@ $user = $user_result->fetch_assoc();
             transform: scale(1.02);
         }
 
-        /* プロフィール画像のスタイル */
+      /* プロフィール画像のスタイル */
         .profile-image-wrapper {
             position: relative;
-            width: 120px; /* 大きさを調整 */
-            height: 120px; /* 大きさを調整 */
+            width: 120px;
+            height: 120px;
             margin-bottom: 15px;
             margin-left: auto;
             margin-right: auto;
+            border-radius: 50%;
+            overflow: hidden; /* 画像がコンテナの外に出ないようにする */
+            border: 4px solid #ddd; /* 枠の追加 */
         }
 
         .profile-image {
-            width: 100%; /* 大きさを調整 */
-            height: 100%; /* 大きさを調整 */
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            object-fit: cover; /* 画像が切り取られるのを防ぐ */
-            cursor: pointer; /* クリック可能であることを示す */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
         }
 
         #profileImageInput {
@@ -180,7 +181,7 @@ $user = $user_result->fetch_assoc();
             left: 0;
             width: 100%;
             height: 100%;
-            cursor: pointer; /* クリック可能であることを示す */
+            cursor: pointer;
         }
     </style>
 </head>
