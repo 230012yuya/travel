@@ -28,6 +28,10 @@ if (isset($_GET['plan_id'])) {
 
     if ($result && $result->num_rows > 0) {
         $plan = $result->fetch_assoc();
+        $start_date = new DateTime($plan['start_date']);
+        $end_date = new DateTime($plan['end_date']);
+        $interval = $start_date->diff($end_date);
+        $total_days = $interval->days + 1; // 全日数を計算（1日目から）
     } else {
         echo "指定されたプランは存在しません。";
         exit;
@@ -47,11 +51,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $budget = $_POST['budget'];
     $details = $_POST['details'];
 
+    // 各日ごとのプランを取得
+    $daily_plans = [];
+    for ($i = 1; $i <= $total_days; $i++) {
+        $daily_plans[$i] = [
+            'morning' => $_POST["day_{$i}_morning"],
+            'afternoon' => $_POST["day_{$i}_afternoon"],
+            'evening' => $_POST["day_{$i}_evening"],
+            'accommodation' => $_POST["day_{$i}_accommodation"]
+        ];
+    }
+
+    // プランの更新
     $update_sql = "UPDATE plans SET departure_point=?, destination=?, start_date=?, end_date=?, number_of_people=?, budget=?, details=? WHERE id=?";
     $stmt = $conn->prepare($update_sql);
     $stmt->bind_param("ssssiisi", $departure_point, $destination, $start_date, $end_date, $number_of_people, $budget, $details, $plan_id);
 
     if ($stmt->execute() === TRUE) {
+        // 日ごとのプランを保存（必要に応じて新しいテーブルを使うか、plansテーブルに保存）
+        // ここに日ごとのプラン保存の処理を追加
+
         header("Location: view_plans.php"); // 更新が成功したらプラン表示ページにリダイレクト
         exit;
     } else {
@@ -177,6 +196,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <label for="details">詳細:</label>
             <textarea name="details" required><?php echo isset($plan['details']) ? $plan['details'] : ''; ?></textarea>
+
+            <?php
+            // 各日ごとのプラン入力フィールドを生成
+            for ($i = 1; $i <= $total_days; $i++) {
+                echo "<h2>$i 日目のプラン</h2>";
+                echo "<label for='day_{$i}_morning'>朝の予定:</label>";
+                echo "<textarea name='day_{$i}_morning' required></textarea>";
+
+                echo "<label for='day_{$i}_afternoon'>昼の予定:</label>";
+                echo "<textarea name='day_{$i}_afternoon' required></textarea>";
+
+                echo "<label for='day_{$i}_evening'>夜の予定:</label>";
+                echo "<textarea name='day_{$i}_evening' required></textarea>";
+
+                echo "<label for='day_{$i}_accommodation'>宿泊先:</label>";
+                echo "<textarea name='day_{$i}_accommodation' required></textarea>";
+            }
+            ?>
 
             <input type="submit" value="更新する">
         </form>
