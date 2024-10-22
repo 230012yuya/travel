@@ -78,6 +78,22 @@ $result = $conn->query($sql);
             text-decoration: none;
             font-weight: bold;
         }
+        .title {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 50px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bc9ff);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .title:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
 
         main {
             max-width: 1000px;
@@ -189,6 +205,7 @@ $result = $conn->query($sql);
             $conn->close();
             ?>
         </ul>
+        <div class="title">Traveeel</div>
     </main>
 
     <script>
