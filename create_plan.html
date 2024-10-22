@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1日の旅行プラン</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f9ff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 4px solid #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+        }
+
+        .timeline-item-header {
+            display: flex;
+            justify-content: space-between;
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .time {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .location {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .transportation {
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .transportation-icon {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>1日の旅行プラン</h1>
+
+        <div class="timeline">
+
+            <!-- 1つ目のスケジュール -->
+            <div class="timeline-item">
+                <div class="timeline-item-header">
+                    <div class="time">08:00</div>
+                    <div class="location">ホテル出発</div>
+                </div>
+                <div class="details">
+                    スタート地点: ホテル東京<br>
+                    目的地: 浅草寺<br>
+                    <div class="transportation">
+                        <span class="transportation-icon">🚇</span> 交通手段: 電車 (東京メトロ 銀座線)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2つ目のスケジュール -->
+            <div class="timeline-item">
+                <div class="timeline-item-header">
+                    <div class="time">09:30</div>
+                    <div class="location">浅草寺観光</div>
+                </div>
+                <div class="details">
+                    観光地: 浅草寺<br>
+                    滞在時間: 約1時間<br>
+                    <div class="transportation">
+                        <span class="transportation-icon">🚶</span> 交通手段: 徒歩
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3つ目のスケジュール -->
+            <div class="timeline-item">
+                <div class="timeline-item-header">
+                    <div class="time">11:00</div>
+                    <div class="location">スカイツリーへ移動</div>
+                </div>
+                <div class="details">
+                    スタート地点: 浅草<br>
+                    目的地: 東京スカイツリー<br>
+                    <div class="transportation">
+                        <span class="transportation-icon">🚶</span> 交通手段: 徒歩
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4つ目のスケジュール -->
+            <div class="timeline-item">
+                <div class="timeline-item-header">
+                    <div class="time">12:30</div>
+                    <div class="location">スカイツリー観光</div>
+                </div>
+                <div class="details">
+                    観光地: 東京スカイツリー<br>
+                    滞在時間: 約2時間<br>
+                    <div class="transportation">
+                        <span class="transportation-icon">🚶</span> 交通手段: 徒歩
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5つ目のスケジュール -->
+            <div class="timeline-item">
+                <div class="timeline-item-header">
+                    <div class="time">15:00</div>
+                    <div class="location">ホテル帰着</div>
+                </div>
+                <div class="details">
+                    スタート地点: 東京スカイツリー<br>
+                    目的地: ホテル東京<br>
+                    <div class="transportation">
+                        <span class="transportation-icon">🚇</span> 交通手段: 電車 (東武線)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
