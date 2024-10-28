@@ -205,7 +205,7 @@ $user = $user_result->fetch_assoc();
     <!-- ユーザーアイコンと名前の表示 -->
     <div class="profile-header">
         <div class="profile-image-wrapper">
-            <img src="uploads/<?php echo !empty($user['profile_image']) ? $user['profile_image'] : 'default.png'; ?>" alt="プロフィール画像" class="profile-image" id="profileImage">
+            <img src="uploads/<?php echo !empty($user['profile_image']) ? $user['profile_image'] : 'default.png'; ?>" alt="" class="profile-image" id="profileImage">
             <label for="profileImageInput" class="profile-image-label"></label>
             <input type="file" name="profile_image" id="profileImageInput" accept="image/*" onchange="document.getElementById('profileImage').src = window.URL.createObjectURL(this.files[0]);">
         </div>
