@@ -171,6 +171,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-decoration: underline; /* ホバー時に下線を表示 */
         }
     </style>
+    <script>
+        function addScheduleField(day) {
+            // 新しい予定の時間と内容を追加する
+            const scheduleContainer = document.getElementById(`schedule_container_${day}`);
+            const newSchedule = document.createElement("div");
+            newSchedule.classList.add("schedule-item");
+
+            newSchedule.innerHTML = `
+                <label>時間:</label>
+                <input type="time" name="day_${day}_time[]" required>
+                <label>予定:</label>
+                <textarea name="day_${day}_activity[]" placeholder="この時間の予定を入力" required></textarea>
+            `;
+            scheduleContainer.appendChild(newSchedule);
+        }
+    </script>
 </head>
 <body>
     <div class="plan-detail">
@@ -198,20 +214,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <textarea name="details" required><?php echo isset($plan['details']) ? $plan['details'] : ''; ?></textarea>
 
             <?php
-            // 各日ごとのプラン入力フィールドを生成
+            // 各日ごとにスケジュール入力フィールドを生成
             for ($i = 1; $i <= $total_days; $i++) {
-                echo "<h2>$i 日目のプラン</h2>";
-                echo "<label for='day_{$i}_morning'>朝の予定:</label>";
-                echo "<textarea name='day_{$i}_morning' required></textarea>";
-
-                echo "<label for='day_{$i}_afternoon'>昼の予定:</label>";
-                echo "<textarea name='day_{$i}_afternoon' required></textarea>";
-
-                echo "<label for='day_{$i}_evening'>夜の予定:</label>";
-                echo "<textarea name='day_{$i}_evening' required></textarea>";
-
-                echo "<label for='day_{$i}_accommodation'>宿泊先:</label>";
-                echo "<textarea name='day_{$i}_accommodation' required></textarea>";
+                echo "<h2>$i 日目のスケジュール</h2>";
+                echo "<div id='schedule_container_$i'>";
+                echo "</div>";
+                echo "<button type='button' onclick='addScheduleField($i)'>予定を追加</button>";
             }
             ?>
 
