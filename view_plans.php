@@ -11,34 +11,21 @@ $db_password = "";
 $dbname = "travel";
 
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
-
 if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
 $user_id = $_SESSION['user_id'];
 
-// お気に入りの数を制限するためのクエリ
-$favorites_sql = "SELECT COUNT(*) AS favorite_count FROM user_favorites WHERE user_id='$user_id'";
+// ユーザーのお気に入りプランを取得
+$favorites_sql = "SELECT plan_id FROM user_favorites WHERE user_id='$user_id'";
 $favorites_result = $conn->query($favorites_sql);
-$favorites_count = $favorites_result->fetch_assoc()['favorite_count'];
-
-// お気に入りを追加する処理
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($favorites_count < 3) {
-        $plan_id = $_POST['plan_id'];
-        $insert_sql = "INSERT INTO user_favorites (user_id, plan_id) VALUES ('$user_id', '$plan_id')";
-        if ($conn->query($insert_sql) === TRUE) {
-            echo "<script>alert('お気に入りに追加しました。');</script>";
-        } else {
-            echo "エラー: " . $conn->error;
-        }
-    } else {
-        echo "<script>alert('お気に入りは最大3つまで選択できます。');</script>";
-    }
+$favorites = [];
+while ($fav_row = $favorites_result->fetch_assoc()) {
+    $favorites[] = $fav_row['plan_id'];
 }
 
-// ユーザーのプランを取得
+// 全てのプランを取得
 $sql = "SELECT id, destination, start_date, end_date, created_at FROM plans WHERE user_id='$user_id'";
 $result = $conn->query($sql);
 ?>
@@ -181,40 +168,51 @@ $result = $conn->query($sql);
     </div>
 
     <main>
-        <h1>過去の旅行プラン</h1>
+        <h1>旅行プラン一覧</h1>
         <ul>
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    echo "<li>作成日　　: " . $row['created_at'] . "<br>目的地　　: " . $row['destination'] . "<br>旅行日程　: " . $row['start_date'] . " ~ " . $row['end_date'] . "<br>";
+                    $is_favorite = in_array($row['id'], $favorites);  // お気に入りかどうかを確認
+                    echo "<li>作成日: " . $row['created_at'] . "<br>目的地: " . $row['destination'] . "<br>旅行日程: " . $row['start_date'] . " ~ " . $row['end_date'] . "<br>";
                     
                     // プラン詳細リンク
                     echo "<a href='plan_detail.php?plan_id=" . $row['id'] . "'>詳細を見る</a>";
 
-                     // お気に入りボタンをハートアイコンに変更
-                     echo "<form action='add_favorite.php' method='post' style='display:inline-block;'>";
-                     echo "<input type='hidden' name='plan_id' value='" . $row['id'] . "'>";
-                     echo "<button class='favorite-btn'><i>❤️</i>追加</button>";
-                     echo "</form>";
-                     
-                     echo "</li>";
-                 }
+                    // お気に入りボタン
+                    echo "<form action='add_favorite.php' method='post' style='display:inline-block;' onsubmit='return toggleFavorite(event, " . $row['id'] . ");'>";
+                    echo "<input type='hidden' name='plan_id' value='" . $row['id'] . "'>";
+                    $button_text = $is_favorite ? "登録済み" : "追加";
+                    echo "<button class='favorite-btn' id='favorite-btn-" . $row['id'] . "'>$button_text</button>";
+                    echo "</form>";
+                    
+                    echo "</li>";
+                }
             } else {
                 echo "<p>作成したプランはありません。</p>";
             }
             $conn->close();
             ?>
         </ul>
-        <div class="title">Traveeel</div>
     </main>
 
     <script>
-        function confirmLogout() {
-            var confirmation = confirm("本当にログアウトしますか？");
-            if (confirmation) {
-                window.location.href = "logout.php";
-            }
+        function toggleFavorite(event, planId) {
+            event.preventDefault();
+            const button = document.getElementById(`favorite-btn-${planId}`);
+            const action = button.innerText === "追加" ? "add" : "remove";
+            button.innerText = action === "add" ? "登録済み" : "追加";
+
+            fetch('add_favorite.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `plan_id=${planId}&action=${action}`
+            }).then(response => response.text()).then(data => {
+                console.log(data);
+            }).catch(error => console.error('エラー:', error));
+
+            return false;
         }
     </script>
-</body> 
+</body>
 </html>
