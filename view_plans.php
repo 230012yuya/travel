@@ -64,7 +64,15 @@ $result = $conn->query($sql);
             padding: 14px 20px;
             text-decoration: none;
             font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
+
+        .navbar a:hover {
+            background-color: #ffb6b9;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
         .title {
             position: absolute;
             top: 10px;
@@ -89,10 +97,10 @@ $result = $conn->query($sql);
             background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
             color: #ff6b6b;
             font-size: 28px;
             margin-bottom: 30px;
@@ -113,6 +121,7 @@ $result = $conn->query($sql);
             padding: 10px;
             border-radius: 5px;
             position: relative;
+            transition: transform 0.3s ease;
         }
 
         li:hover {
@@ -124,8 +133,7 @@ $result = $conn->query($sql);
             color: #ff6b6b;
         }
 
-         /* 自然な感じのボタンスタイル */
-         .favorite-btn {
+        .favorite-btn {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -136,9 +144,6 @@ $result = $conn->query($sql);
             border-radius: 15px;
             cursor: pointer;
             font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             transition: background-color 0.3s, transform 0.3s;
         }
 
@@ -150,10 +155,6 @@ $result = $conn->query($sql);
         .favorite-btn:active {
             background-color: #ff4d4d;
             transform: scale(0.95);
-        }
-
-        .favorite-btn i {
-            margin-right: 5px;
         }
     </style>
 </head>
@@ -167,25 +168,22 @@ $result = $conn->query($sql);
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
 
+    <div class="title">Traveeel</div>
+
     <main>
         <h1>旅行プラン一覧</h1>
         <ul>
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    $is_favorite = in_array($row['id'], $favorites);  // お気に入りかどうかを確認
+                    $is_favorite = in_array($row['id'], $favorites);
                     echo "<li>作成日: " . $row['created_at'] . "<br>目的地: " . $row['destination'] . "<br>旅行日程: " . $row['start_date'] . " ~ " . $row['end_date'] . "<br>";
-                    
-                    // プラン詳細リンク
                     echo "<a href='plan_detail.php?plan_id=" . $row['id'] . "'>詳細を見る</a>";
-
-                    // お気に入りボタン
                     echo "<form action='add_favorite.php' method='post' style='display:inline-block;' onsubmit='return toggleFavorite(event, " . $row['id'] . ");'>";
                     echo "<input type='hidden' name='plan_id' value='" . $row['id'] . "'>";
                     $button_text = $is_favorite ? "登録済み" : "追加";
                     echo "<button class='favorite-btn' id='favorite-btn-" . $row['id'] . "'>$button_text</button>";
                     echo "</form>";
-                    
                     echo "</li>";
                 }
             } else {
@@ -197,6 +195,13 @@ $result = $conn->query($sql);
     </main>
 
     <script>
+        function confirmLogout() {
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php";
+            }
+        }
+
         function toggleFavorite(event, planId) {
             event.preventDefault();
             const button = document.getElementById(`favorite-btn-${planId}`);

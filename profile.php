@@ -1,10 +1,16 @@
 <?php
 session_start();
+
+// セッションからユーザー情報を取得
 if (!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
     exit;
 }
 
+$name = $_SESSION['name'];
+$profile_image = $_SESSION['profile_image'];
+
+// データベース接続
 $servername = "localhost";
 $db_username = "root";
 $db_password = "";
@@ -16,19 +22,33 @@ if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-$user_id = $_SESSION['user_id'];
+// ユーザーのプロフィール情報をデータベースから取得
+$sql = "SELECT * FROM user WHERE name = '$name'";
+$result = $conn->query($sql);
+$user = $result->fetch_assoc();
 
-// お気に入りを取得するクエリ（3つまで）
-$sql_favorites = "SELECT plans.destination, plans.start_date, plans.end_date FROM user_favorites 
-                  JOIN plans ON user_favorites.plan_id = plans.id 
-                  WHERE user_favorites.user_id = '$user_id'
-                  LIMIT 3";
-$favorites_result = $conn->query($sql_favorites);
+// プロフィール更新処理
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $bio = $_POST['bio'];
+    $favorite_plans = $_POST['favorite_plans'];
 
-// ユーザー情報を取得
-$sql_user = "SELECT name, bio, profile_image FROM user WHERE id='$user_id'";
-$user_result = $conn->query($sql_user);
-$user = $user_result->fetch_assoc();
+    // 画像アップロード処理
+    if ($_FILES['profile_image']['name'] != "") {
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
+        move_uploaded_file($_FILES["profile_image"]["tmp_name"], $target_file);
+        $profile_image = basename($_FILES["profile_image"]["name"]);
+    }
+
+    // データベース更新
+    $update_sql = "UPDATE user SET bio = '$bio', favorite_plans = '$favorite_plans', profile_image = '$profile_image' WHERE name = '$name'";
+    if ($conn->query($update_sql) === TRUE) {
+        header("Location: profile.php"); // 更新後にリロード
+        exit();
+    } else {
+        echo "エラー: " . $conn->error;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,14 +56,13 @@ $user = $user_result->fetch_assoc();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロフィール</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <title>プロフィールページ</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f9ff; /* 柔らかいパステルブルー */
+            background-color: #f0f9ff;
             color: #333;
             display: flex;
             flex-direction: column;
@@ -52,7 +71,7 @@ $user = $user_result->fetch_assoc();
 
         .navbar {
             overflow: hidden;
-            background-color: rgba(50, 50, 70, 0.9); /* 少し濃い目の背景 */
+            background-color: rgba(50, 50, 70, 0.9);
             padding: 0 15px;
             font-size: 18px;
         }
@@ -69,12 +88,11 @@ $user = $user_result->fetch_assoc();
         }
 
         .navbar a:hover {
-            background-color: #ffb6b9; /* 柔らかいピンク */
+            background-color: #ffb6b9;
             color: #fff;
-            transform: scale(1.05); /* ホバー時の動き */
+            transform: scale(1.05);
         }
 
-        /* Traveeelタイトル */
         .title {
             position: absolute;
             top: 10px;
@@ -92,156 +110,121 @@ $user = $user_result->fetch_assoc();
             transform: scale(1.1) rotate(5deg);
         }
 
-        main {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: rgba(255, 255, 255, 0.9); /* 半透明の背景 */
+        .profile-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            margin: 80px auto;
+        }
+
+        .profile-container img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 3px solid #ffb6b9;
         }
 
         h1 {
-            text-align: center;
-            color: #ff6b6b; /* カラフルな赤 */
-            font-size: 28px;
-            margin-bottom: 30px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 8px;
-            font-size: 16px;
-            color: #333;
-        }
-
-        select {
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ffb6b9; /* カラフルなピンク */
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            background-color: #ff6b6b; /* カラフルな赤 */
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #ffd93d; /* 明るい黄色に変更 */
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-            background-color: #ff6b6b;
-            transform: scale(1.02);
-        }
-
-      /* プロフィール画像のスタイル */
-        .profile-image-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
+            font-size: 24px;
+            color: #3a506b;
             margin-bottom: 15px;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 50%;
-            overflow: hidden; /* 画像がコンテナの外に出ないようにする */
-            border: 4px solid #ddd; /* 枠の追加 */
         }
 
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            cursor: pointer;
+        p {
+            color: #555;
         }
 
-        #profileImageInput {
-            display: none; /* 隠しフィールド */
+        a.button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .profile-image-label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+        a.button:hover {
+            background-color: #ffd93d;
+            transform: scale(1.05);
+        }
+
+        .edit-form {
+            display: none;
+        }
+
+        .edit-button {
+            background-color: #ffd93d;
+            padding: 8px 15px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .edit-button:hover {
+            background-color: #ff6b6b;
         }
     </style>
 </head>
 <body>
-
-<div class="navbar" id="myNavbar">
-    <a href="home.php">ホーム</a>
-    <a href="create_plan.php">旅行プラン作成</a>
-    <a href="display.php">旅行プラン表示</a>
-    <a href="profile.php">プロフィール</a>
-    <a href="view_plans.php">過去の旅行プラン</a>
-    <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
-</div>
-
-<!-- Traveeelのタイトル -->
-<div class="title">Traveeel</div>
-
-<main>
-    <h1>プロフィール</h1>
-
-    <!-- ユーザーアイコンと名前の表示 -->
-    <div class="profile-header">
-        <div class="profile-image-wrapper">
-            <img src="uploads/<?php echo !empty($user['profile_image']) ? $user['profile_image'] : 'default.png'; ?>" alt="" class="profile-image" id="profileImage">
-            <label for="profileImageInput" class="profile-image-label"></label>
-            <input type="file" name="profile_image" id="profileImageInput" accept="image/*" onchange="document.getElementById('profileImage').src = window.URL.createObjectURL(this.files[0]);">
-        </div>
-        <h2><?php echo $user['name']; ?></h2>
+    <div class="navbar" id="myNavbar">
+        <a href="home.php">ホーム</a>
+        <a href="create_plan.php">旅行プラン作成</a>
+        <a href="display.php">旅行プラン表示</a>
+        <a href="profile.php">プロフィール</a>
+        <a href="view_plans.php">過去の旅行プラン</a>
+        <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
 
-    <!-- お気に入りのプラン表示部分 -->
-    <h2>お気に入りのプラン</h2>
-    <ul>
-        <?php while ($row = $favorites_result->fetch_assoc()) { ?>
-            <li><?php echo $row['destination'] . " - " . $row['start_date'] . " 〜 " . $row['end_date']; ?></li>
-        <?php } ?>
-    </ul>
+    <div class="title">Traveeel</div>
+    
+    <div class="profile-container">
+        <h1><?php echo htmlspecialchars($user['name']); ?>さんのプロフィール</h1>
+        <img src="uploads/<?php echo htmlspecialchars($user['profile_image']); ?>" alt="プロフィール画像">
+        <p><strong>自己紹介:</strong> <?php echo htmlspecialchars($user['bio']); ?></p>
+        <p><strong>お気に入りプラン:</strong> <?php echo htmlspecialchars($user['favorite_plans']); ?></p>
 
-    <!-- プロフィール更新フォーム -->
-    <form action="profile.php" method="post" enctype="multipart/form-data">
-        <label for="name">ユーザー名:</label>
-        <input type="text" id="name" name="name" value="<?php echo $user['name']; ?>" required>
-        
-        <label for="bio">自己紹介文:</label>
-        <textarea id="bio" name="bio" required><?php echo $user['bio']; ?></textarea>
+        <!-- 編集フォームの表示 -->
+        <button class="edit-button" onclick="toggleEditForm()">プロフィール編集</button>
 
-        <button type="submit">更新</button>
-    </form>
-</main>
+        <div class="edit-form" id="editForm">
+            <form action="profile.php" method="POST" enctype="multipart/form-data">
+                <label for="bio">自己紹介:</label><br>
+                <textarea name="bio" id="bio" rows="4" cols="30"><?php echo htmlspecialchars($user['bio']); ?></textarea><br>
 
-<script>
-function confirmLogout() {
-    if (confirm("本当にログアウトしますか？")) {
-        window.location.href = "logout.php";
-    }
-}
-</script>
+                <label for="favorite_plans">お気に入りの旅行プラン:</label><br>
+                <input type="text" name="favorite_plans" id="favorite_plans" value="<?php echo htmlspecialchars($user['favorite_plans']); ?>"><br>
 
+                <label for="profile_image">プロフィール画像:</label><br>
+                <input type="file" name="profile_image" id="profile_image"><br>
+
+                <input type="submit" value="更新する">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function confirmLogout() {
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php";
+            }
+        }
+
+        // 編集フォームの表示・非表示を切り替える
+        function toggleEditForm() {
+            const form = document.getElementById('editForm');
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>
+
 <?php
-$conn->close(); 
+$conn->close();
 ?>

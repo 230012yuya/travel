@@ -130,6 +130,35 @@
         p a:hover {
             text-decoration: underline;
         }
+        @keyframes wave {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.title {
+    animation: wave 1s ease-in-out infinite;
+    text-align: center;
+    font-size: 50px;
+    font-weight: 700;
+    color: #f39c12;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
     </style>
 </head>
 <body>

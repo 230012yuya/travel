@@ -6,40 +6,77 @@
     <title>ユーザー登録</title>
     <style>
         /* Google Fontsのインポート */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Roboto:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@300;600&family=Roboto:wght@400;500&display=swap');
 
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background-image: url(images/landscape_00028.jpg);
+            background-image: url(images/photo-1668640019831-072823bc0ce1.avif);
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             color: #333;
-        }
-
-        .title {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 48px;
-            font-weight: 600;
-            color: #f39c12;
-            font-family: 'Poppins', sans-serif;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .container {
+            width: 100%;
             max-width: 400px;
-            margin: 50px auto;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.8));
-            padding: 30px;
-            border-radius: 30px;
+            padding: 20px;
+            border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
+        h1 {
+            text-align: center;
+            font-size: 50px;
+            font-weight: 700;
+            color: #f39c12;
+            font-family: 'Montserrat', sans-serif;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            animation: move 2s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+h1 {
+    animation: wave 1s ease-in-out infinite;
+    text-align: center;
+    font-size: 50px;
+    font-weight: 700;
+    color: #f39c12;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+        
+
         h2 {
             text-align: center;
-            color: #f39c12;
+            color: black;
             font-weight: bold;
             margin-bottom: 20px;
             font-size: 26px;
@@ -60,8 +97,7 @@
 
         input[type="text"],
         input[type="email"],
-        input[type="password"],
-        input[type="file"] {
+        input[type="password"] {
             padding: 12px;
             border: 2px solid #f39c12;
             border-radius: 20px;
@@ -73,8 +109,7 @@
 
         input[type="text"]:focus,
         input[type="email"]:focus,
-        input[type="password"]:focus,
-        input[type="file"]:focus {
+        input[type="password"]:focus {
             background-color: #fffacd;
             border-color: #f1c40f;
         }
@@ -115,24 +150,25 @@
     </style>
 </head>
 <body>
-    <h1 class="title">Traveeel</h1>
     <div class="container">
+        <h1>Traveeel</h1>
         <h2>ユーザー登録</h2>
         <form action="register_process.php" method="post" enctype="multipart/form-data">
-            <label for="name">ユーザー名:</label>
-            <input type="text" id="name" name="name" required>
+    <label for="name">ユーザー名:</label>
+    <input type="text" id="name" name="name" required>
 
-            <label for="email">Eメール:</label>
-            <input type="email" id="email" name="email" required>
+    <label for="email">Eメール:</label>
+    <input type="email" id="email" name="email" required>
 
-            <label for="password">パスワード:</label>
-            <input type="password" id="password" name="password" required>
+    <label for="password">パスワード:</label>
+    <input type="password" id="password" name="password" required>
 
-            <label for="profile_image">プロフィール画像を選択:</label>
-            <input type="file" id="profile_image" name="profile_image" accept="image/*">
+    <label for="profile_image">プロフィール画像:</label>
+    <input type="file" id="profile_image" name="profile_image" accept="image/*">
 
-            <button type="submit">登録する</button>
-        </form>
+    <button type="submit">登録する</button>
+</form>
+
         <p>すでにアカウントをお持ちでしたら<a href="login.php">こちら</a>からログイン</p>
     </div>
 </body>
