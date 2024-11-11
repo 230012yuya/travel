@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// セッションからユーザー情報を取得
 if (!isset($_SESSION['loggedin'])) {
     header("Location: login.php");
     exit;
@@ -10,29 +9,30 @@ if (!isset($_SESSION['loggedin'])) {
 $name = $_SESSION['name'];
 $profile_image = $_SESSION['profile_image'];
 
-// データベース接続
 $servername = "localhost";
 $db_username = "root";
 $db_password = "";
 $dbname = "travel";
 
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
-
 if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-// ユーザーのプロフィール情報をデータベースから取得
 $sql = "SELECT * FROM user WHERE name = '$name'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 
-// プロフィール更新処理
+$user_id = $_SESSION['user_id'];
+$favorites_sql = "SELECT plans.* FROM plans 
+                  JOIN user_favorites ON plans.id = user_favorites.plan_id 
+                  WHERE user_favorites.user_id = '$user_id'";
+$favorites_result = $conn->query($favorites_sql);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $bio = $_POST['bio'];
     $favorite_plans = $_POST['favorite_plans'];
 
-    // 画像アップロード処理
     if ($_FILES['profile_image']['name'] != "") {
         $target_dir = "uploads/";
         $target_file = $target_dir . basename($_FILES["profile_image"]["name"]);
@@ -40,10 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $profile_image = basename($_FILES["profile_image"]["name"]);
     }
 
-    // データベース更新
-    $update_sql = "UPDATE user SET bio = '$bio', favorite_plans = '$favorite_plans', profile_image = '$profile_image' WHERE name = '$name'";
+    $update_sql = "UPDATE user SET bio = '$bio', profile_image = '$profile_image' WHERE name = '$name'";
     if ($conn->query($update_sql) === TRUE) {
-        header("Location: profile.php"); // 更新後にリロード
+        header("Location: profile.php");
         exit();
     } else {
         echo "エラー: " . $conn->error;
@@ -187,8 +186,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <h1><?php echo htmlspecialchars($user['name']); ?>さんのプロフィール</h1>
         <img src="uploads/<?php echo htmlspecialchars($user['profile_image']); ?>" alt="プロフィール画像">
         <p><strong>自己紹介:</strong> <?php echo htmlspecialchars($user['bio']); ?></p>
-        <p><strong>お気に入りプラン:</strong> <?php echo htmlspecialchars($user['favorite_plans']); ?></p>
-
+        <h2>お気に入りプラン</h2>
+        <ul>
+            <?php while ($plan = $favorites_result->fetch_assoc()): ?>
+                <li>
+                    目的地: <?php echo htmlspecialchars($plan['destination']); ?><br>
+                    日程: <?php echo htmlspecialchars($plan['start_date']); ?> ~ <?php echo htmlspecialchars($plan['end_date']); ?><br>
+                    <a href="plan_detail.php?plan_id=<?php echo $plan['id']; ?>">詳細を見る</a>
+                </li>
+            <?php endwhile; ?>
+        </ul>
         <!-- 編集フォームの表示 -->
         <button class="edit-button" onclick="toggleEditForm()">プロフィール編集</button>
 
