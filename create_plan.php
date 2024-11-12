@@ -66,11 +66,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             予算: $budget, 
             人数: $num_people";
 
-    // API 呼び出し実行(JSON)
-    $json = callGeminiAPI($prompt, GEMINI_API_KEY);
+    // GeminiAPI 呼び出し実行(JSON)
+    // $json = callGeminiAPI($prompt, GEMINI_API_KEY);
+    $json = testJson();
 
     // JSONをPHPの配列に変換
     $ai_plan = json_decode($json, true);
+}
+
+function testJson() {
+    $json = '
+    { 
+        "plan": { 
+            "start_location": "神奈川", 
+            "destination": "大阪", 
+            "date": "2024-11-15", 
+             "budget": 30000, 
+             "num_people": 1
+        },
+        "itinerary": [ 
+            { 
+                "day": 1, 
+                "activities": [ 
+                    { "name": "新幹線で大阪へ", "type": "transportation", "duration": "2時間30分", "cost": 14000 }, 
+                    { "name": "大阪城", "type": "sightseeing", "duration": "2時間", "cost": 600 }, 
+                    { "name": "道頓堀で夕食", "type": "food", "duration": "1時間30分", "cost": 3000 }
+                ] 
+            }
+        ]
+    }';
+    return $json;
 }
 ?>
 
