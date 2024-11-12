@@ -158,22 +158,22 @@ $conn->close();
             border: 3px solid #ffb6b9;
         }
 
-        h1 {
-            font-size: 28px;
-            color: #3a506b;
-            margin-bottom: 20px;
-        }
-
         .section-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             color: #ff6b6b;
             margin-top: 20px;
         }
 
-        p {
-            color: #555;
+        .section-content {
             font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin: 10px 0;
         }
 
         a.button {
@@ -204,7 +204,7 @@ $conn->close();
             font-weight: bold;
             margin-top: 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 15px;
             cursor: pointer;
         }
 
@@ -213,13 +213,19 @@ $conn->close();
             color: white;
         }
 
-        textarea, input[type="file"], input[type="submit"] {
+        textarea, input[type="file"], input[type="submit"], .reset-button {
             margin-top: 10px;
             width: 100%;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 15px;
             border: 1px solid #ccc;
             font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus, input[type="file"]:focus, input[type="submit"]:hover, .reset-button:hover {
+            border-color: #ff6b6b;
         }
 
         input[type="submit"] {
@@ -233,6 +239,20 @@ $conn->close();
 
         input[type="submit"]:hover {
             background-color: #ffd93d;
+        }
+
+        .reset-button {
+            background-color: #84fab0;
+            color: white;
+            font-weight: bold;
+            border: none;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -250,28 +270,31 @@ $conn->close();
 
     <div class="profile-container">
         <h1><?php echo htmlspecialchars($user['name']); ?>さんのプロフィール</h1>
-        <img src="uploads/<?php echo htmlspecialchars($user['profile_image']); ?>" alt="プロフィール画像">
+        <img id="profileImage" src="uploads/<?php echo htmlspecialchars($user['profile_image'] ?: 'image1.png'); ?>" alt="プロフィール画像">
         <div class="section-title">自己紹介</div>
-        <p><?php echo htmlspecialchars($user['bio']); ?></p>
+        <p class="section-content"><?php echo htmlspecialchars($user['bio'] ?: '未設定'); ?></p>
         <div class="section-title">お気に入りの旅行プラン</div>
-        <p><?php echo htmlspecialchars($user['favorite_plans']); ?></p>
+        <p class="section-content"><?php echo htmlspecialchars($user['favorite_plans'] ?: '未設定'); ?></p>
 
         <button class="edit-button" onclick="toggleEditForm()">プロフィール編集</button>
 
         <div class="edit-form" id="editForm">
             <form action="profile.php" method="POST" enctype="multipart/form-data">
-                <label for="bio" class="section-title">自己紹介:</label><br>
-                <textarea name="bio" id="bio" rows="4"><?php echo htmlspecialchars($user['bio']); ?></textarea><br>
+                <label for="bio" class="section-title">自己紹介:</label>
+                <textarea name="bio" id="bio" rows="4"><?php echo htmlspecialchars($user['bio']); ?></textarea>
 
-                <label for="favorite_plans" class="section-title">お気に入りの旅行プラン:</label><br>
-                <textarea name="favorite_plans" id="favorite_plans" rows="4"><?php echo htmlspecialchars($user['favorite_plans']); ?></textarea><br>
+                <label for="favorite_plans" class="section-title">お気に入りの旅行プラン:</label>
+                <textarea name="favorite_plans" id="favorite_plans" rows="4"><?php echo htmlspecialchars($user['favorite_plans']); ?></textarea>
 
-                <label for="profile_image">プロフィール画像:</label><br>
-                <input type="file" name="profile_image" id="profile_image"><br>
+                <label for="profile_image">プロフィール画像:</label>
+                <input type="file" name="profile_image" id="profile_image">
 
                 <input type="submit" value="更新する">
+                <button type="button" class="reset-button" onclick="resetProfileImage()">画像をリセット</button>
             </form>
         </div>
+
+        <p class="error-message" id="errorMessage" style="display: none;">エラーが発生しました。もう一度試してください。</p>
     </div>
 
     <script>
@@ -287,6 +310,11 @@ $conn->close();
             if (form.style.display === 'block') {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        }
+
+        function resetProfileImage() {
+            const imgElement = document.getElementById('profileImage');
+            imgElement.src = 'images/kkrn_icon_user_6.png'; // デフォルト画像
         }
     </script>
 </body>
