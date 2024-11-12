@@ -77,6 +77,9 @@
 
         form {
             margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* 要素間の間隔を設定 */
         }
 
         input[type="text"] {
@@ -141,12 +144,13 @@
     <main>
         <h1>ホーム</h1>
         <form action="search_results.php" method="post">
-            <input type="text" name="search" placeholder="プランを検索">
+            <input type="text" name="search" placeholder="プランを検索" style="margin-right: 10px;">
             <button type="submit">検索</button>
         </form>
         <button onclick="window.location.href='create_plan.php'">新しいプランを作成する</button>
-        <button onclick="window.location.href='view_plans.php'">過去の旅行プランを見る</button>
-    </main>
+    <button onclick="window.location.href='view_plans.php'">過去の旅行プランを見る</button>
+</main>
+
 
     <script>
         // ログアウト確認ダイアログ

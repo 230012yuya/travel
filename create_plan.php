@@ -88,9 +88,9 @@ function testJson() {
             { 
                 "day": 1, 
                 "activities": [ 
-                    { "name": "新幹線で大阪へ", "type": "transportation", "duration": "2時間30分", "cost": 14000 }, 
-                    { "name": "大阪城", "type": "sightseeing", "duration": "2時間", "cost": 600 }, 
-                    { "name": "道頓堀で夕食", "type": "food", "duration": "1時間30分", "cost": 3000 }
+                    { "name": "新幹線で大阪へ", "type": "transportation", "duration": "2時間30分", "budget": 14000 }, 
+                    { "name": "大阪城", "type": "sightseeing", "duration": "2時間", "budget": 600 }, 
+                    { "name": "道頓堀で夕食", "type": "food", "duration": "1時間30分", "budget": 3000 }
                 ] 
             }
         ]
