@@ -1,0 +1,104 @@
+{
+    "trip": {
+        "departure": "神奈川",
+        "destination": "沖縄",
+        "date": {
+            "start": "2024-11-13",
+            "end": "2024-11-17"
+        },
+        "budget": 800000,
+        "people": 2,
+        "itinerary": [
+            {
+                "day": 1,
+                "activities": [
+                    {
+                        "name": "那覇空港到着",
+                        "type": "travel",
+                        "description": "那覇空港に到着。レンタカーを借りてホテルへ移動。"
+                    },
+                    {
+                        "name": "国際通り散策",
+                        "type": "sightseeing",
+                        "description": "沖縄の繁華街、国際通りを散策。お土産や食事を楽しむ。"
+                    },
+                    {
+                        "name": "首里城見学",
+                        "type": "sightseeing",
+                        "description": "琉球王国の城、首里城を見学する。"
+                    },
+                    {
+                        "name": "夕食は沖縄料理",
+                        "type": "dining",
+                        "description": "沖縄料理店で夕食。"
+                    }
+                ]
+            },
+            {
+                "day": 2,
+                "activities": [
+                    {
+                        "name": "美ら海水族館",
+                        "type": "sightseeing",
+                        "description": "沖縄の海を代表する水族館、美ら海水族館へ。"
+                    },
+                    {
+                        "name": "恩納村ビーチ",
+                        "type": "relax",
+                        "description": "恩納村の美しいビーチで海水浴を楽しむ。"
+                    },
+                    {
+                        "name": "夕食はシーフード",
+                        "type": "dining",
+                        "description": "新鮮なシーフードを堪能。"
+                    }
+                ]
+            },
+            {
+                "day": 3,
+                "activities": [
+                    {
+                        "name": "古宇利島",
+                        "type": "sightseeing",
+                        "description": "美しい海に囲まれた古宇利島へ。"
+                    },
+                    {
+                        "name": "万座毛",
+                        "type": "sightseeing",
+                        "description": "断崖絶壁の景勝地、万座毛を見学する。"
+                    },
+                    {
+                        "name": "夕食は沖縄そば",
+                        "type": "dining",
+                        "description": "沖縄そばを味わう。"
+                    }
+                ]
+            },
+            {
+                "day": 4,
+                "activities": [
+                    {
+                        "name": "自由行動",
+                        "type": "free",
+                        "description": "各自好きな場所で過ごす。"
+                    },
+                    {
+                        "name": "お土産探し",
+                        "type": "shopping",
+                        "description": "沖縄のお土産を買いに行く。"
+                    }
+                ]
+            },
+            {
+                "day": 5,
+                "activities": [
+                    {
+                        "name": "那覇空港出発",
+                        "type": "travel",
+                        "description": "那覇空港から出発。"
+                    }
+                ]
+            }
+        ]
+    }
+}

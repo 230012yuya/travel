@@ -1,6 +1,53 @@
 <?php
 // API キーを安全に格納 (例: 環境変数から取得)
-$api_key = getenv('AIzaSyDyj9zK6XXeGbRDBjpXS42Qk57WcqI6AjY');
+require_once 'env.php';
+
+// Gemini API 呼び出し関数
+function callGeminiAPI($prompt, $api_key)
+{
+    // API 呼び出しのためのデータ
+    // $data = [
+    //     'prompt' => $prompt,
+    //     'max_tokens' => 1024,  // 必要に応じて調整
+    // ];
+
+    $data = [
+        'contents' => [
+            [
+                'parts' => [
+                    ['text' => $prompt],
+                ]
+            ]
+        ]
+    ];
+
+    // $url = "https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-chat:generate?key=" . $api_key;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $api_key);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo json_encode(['error' => curl_error($ch)]);
+    } else {
+        $response_data = json_decode($response, true);
+        if (isset($response_data['candidates'][0]['content']['parts'][0]['text'])) {
+            $text = $response_data['candidates'][0]['content']['parts'][0]['text'];
+            $json = str_replace(['```json', '```'], '', $text);
+        }
+    }
+
+    // cURLセッションの終了
+    curl_close($ch);
+
+    return $json;
+}
+
 
 // フォームが送信されたときにデータを受け取る
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,55 +59,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $num_people = htmlspecialchars($_POST['num_people']);
 
     // API 呼び出しのためのプロンプト作成
-    $prompt = "旅行プランの概要: 出発地点: $departure_point, 目的地: $destination, 日付: $start_date から $end_date, 予算: $budget, 人数: $num_people.";
+    $prompt = "次の条件で旅行プランを作成し、JSONフォーマットのみでレスポンス（文章なし）
+            出発地点: $departure_point, 
+            目的地: $destination, 
+            日付: $start_date から $end_date, 
+            予算: $budget, 
+            人数: $num_people";
 
-    // Gemini API 呼び出し関数
-    function callGeminiAPI($prompt, $api_key) {
-        // API 呼び出しのためのデータ
-        $data = [
-            'prompt' => $prompt,
-            'max_tokens' => 1024,  // 必要に応じて調整
-        ];
+    // API 呼び出し実行(JSON)
+    $json = callGeminiAPI($prompt, GEMINI_API_KEY);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-chat:generate?key=" . $api_key);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            return ['error' => curl_error($ch)];
-        } else {
-            $response_data = json_decode($response, true);
-            curl_close($ch);
-            return $response_data;
-        }
-    }
-
-    // API 呼び出し実行
-    $response = callGeminiAPI($prompt, $api_key);
-
-    // レスポンスの表示処理
-    if (isset($response['error'])) {
-        $error_message = "API 呼び出しエラー: " . $response['error'];
-    } elseif (isset($response['choices'][0]['text'])) {
-        // 生成されたプランを取得
-        $plan_result = $response['choices'][0]['text'];
-        
-        // display.php にリダイレクトしてプラン結果を送信
-        header("Location: display.php?plan=" . urlencode($plan_result));
-        exit();  // リダイレクト後は処理を終了
-    } else {
-        $error_message = "適切な応答がありませんでした。";
-    }
+    // JSONをPHPの配列に変換
+    $ai_plan = json_decode($json, true);
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,14 +127,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
             color: #ff6b6b;
         }
+
         label {
             font-weight: bold;
             margin-bottom: 5px;
         }
+
         input {
             width: 100%;
             padding: 10px;
@@ -126,6 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
         button {
             width: 100%;
             padding: 15px;
@@ -136,9 +156,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 16px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #ff3b3b;
         }
+
         .error-message {
             color: red;
             text-align: center;
@@ -146,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
 <body>
     <div class="navbar" id="myNavbar">
         <a href="home.php">ホーム</a>
@@ -188,6 +211,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (isset($error_message)): ?>
             <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
         <?php endif; ?>
+
+        <!-- Gemini の結果 -->
+        <?php if (isset($json)): ?>
+            <div>
+                <?= $json ?>
+            </div>
+
+            <div>
+                <?php var_dump($ai_plan); ?>
+            </div>
+        <?php endif ?>
     </div>
 </body>
+
 </html>
