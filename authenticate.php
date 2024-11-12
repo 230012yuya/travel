@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     if (password_verify($pass, $row['password'])) {
         $_SESSION['loggedin'] = true;
-        $_SESSION['name'] = $user;
+        $_SESSION['user_id'] = $row['id'];
         header("Location: home.php");
         exit;
     } else {

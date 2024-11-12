@@ -1,29 +1,34 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['loggedin'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-$name = $_SESSION['name'];
-$profile_image = $_SESSION['profile_image'];
+// セッションから usre_id取得
+$user_id = $_SESSION['user_id'];
 
 $servername = "localhost";
 $db_username = "root";
 $db_password = "";
 $dbname = "travel";
 
+
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM user WHERE name = '$name'";
+// userテーブルの idで検索
+$sql = "SELECT * FROM user WHERE id = '$user_id'";
 $result = $conn->query($sql);
 $user = $result->fetch_assoc();
 
-$user_id = $_SESSION['user_id'];
+$profile_image = $user['profile_image'];
+
+
+
 $favorites_sql = "SELECT plans.* FROM plans 
                   JOIN user_favorites ON plans.id = user_favorites.plan_id 
                   WHERE user_favorites.user_id = '$user_id'";
