@@ -5,12 +5,6 @@ require_once 'env.php';
 // Gemini API 呼び出し関数
 function callGeminiAPI($prompt, $api_key)
 {
-    // API 呼び出しのためのデータ
-    // $data = [
-    //     'prompt' => $prompt,
-    //     'max_tokens' => 1024,  // 必要に応じて調整
-    // ];
-
     $data = [
         'contents' => [
             [
@@ -21,7 +15,6 @@ function callGeminiAPI($prompt, $api_key)
         ]
     ];
 
-    // $url = "https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-chat:generate?key=" . $api_key;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $api_key);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -42,12 +35,10 @@ function callGeminiAPI($prompt, $api_key)
         }
     }
 
-    // cURLセッションの終了
     curl_close($ch);
 
-    return $json;
+    return $json ?? null;
 }
-
 
 // フォームが送信されたときにデータを受け取る
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -59,43 +50,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $num_people = htmlspecialchars($_POST['num_people']);
 
     // API 呼び出しのためのプロンプト作成
-    $prompt = "次の条件で旅行プランを作成し、JSONフォーマットのみでレスポンス（文章なし）
-            出発地点: $departure_point, 
-            目的地: $destination, 
-            日付: $start_date から $end_date, 
-            予算: $budget, 
-            人数: $num_people";
+    $prompt = "次の条件で旅行プランを作成し、JSONフォーマットのみでレスポンス（文章なし）:
+        出発地点: $departure_point, 
+        目的地: $destination, 
+        日付: $start_date から $end_date, 
+        予算: $budget 円, 
+        人数: $num_people 人";
 
-    // GeminiAPI 呼び出し実行(JSON)
-    // $json = callGeminiAPI($prompt, GEMINI_API_KEY);
-    $json = testJson();
+    // Gemini API 呼び出し実行
+    $json = callGeminiAPI($prompt, GEMINI_API_KEY);
 
-    // JSONをPHPの配列に変換
-    $ai_plan = json_decode($json, true);
-}
-
-function testJson() {
-    $json = '
-    { 
-        "plan": { 
-            "start_location": "神奈川", 
-            "destination": "大阪", 
-            "date": "2024-11-15", 
-             "budget": 30000, 
-             "num_people": 1
-        },
-        "itinerary": [ 
-            { 
-                "day": 1, 
-                "activities": [ 
-                    { "name": "新幹線で大阪へ", "type": "transportation", "duration": "2時間30分", "budget": 14000 }, 
-                    { "name": "大阪城", "type": "sightseeing", "duration": "2時間", "budget": 600 }, 
-                    { "name": "道頓堀で夕食", "type": "food", "duration": "1時間30分", "budget": 3000 }
-                ] 
-            }
-        ]
-    }';
-    return $json;
+    // JSON を PHP の配列に変換
+    if ($json) {
+        $ai_plan = json_decode($json, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $error_message = "JSON の解析中にエラーが発生しました。";
+        }
+    } else {
+        $error_message = "API 呼び出しに失敗しました。";
+    }
 }
 ?>
 
@@ -238,15 +211,10 @@ function testJson() {
         <?php endif; ?>
 
         <!-- Gemini の結果 -->
-        <?php if (isset($json)): ?>
-            <div>
-                <?= $json ?>
-            </div>
-
-            <div>
-                <?php var_dump($ai_plan); ?>
-            </div>
-        <?php endif ?>
+        <?php if (isset($ai_plan)): ?>
+            <h2>生成された旅行プラン</h2>
+            <pre><?= htmlspecialchars(json_encode($ai_plan, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) ?></pre>
+        <?php endif; ?>
     </div>
 </body>
 
