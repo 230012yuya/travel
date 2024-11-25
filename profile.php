@@ -89,7 +89,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "プロフィール更新エラー: " . $conn->error;
     }
 }
+// お気に入りプランを取得
+$query = "
+    SELECT p.destination AS plan_name, p.details
+    FROM user_favorites uf
+    INNER JOIN plans p ON uf.plan_id = p.id
+    WHERE uf.user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$favorites_result = $stmt->get_result();
 
+$favorites_text = '';
+while ($row = $favorites_result->fetch_assoc()) {
+    $favorites_text .= "・" . htmlspecialchars($row['plan_name']) . ": " . htmlspecialchars($row['details']) . "\n";
+}
+$favorites_text = trim($favorites_text);
+
+$stmt->close();
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -297,6 +314,11 @@ $conn->close();
         <div class="section-title">お気に入りの旅行プラン</div>
         <p class="section-content"><?php echo htmlspecialchars($user['favorite_plans'] ?: '未設定'); ?></p>
 
+        <div class="section-title">お気に入りの旅行プラン</div>
+        <textarea name="favorite_plans" id="favorite_plans" rows="4" readonly>
+<?php echo $favorites_text ?: 'お気に入りの旅行プランがまだ設定されていません。'; ?>
+        </textarea>
+
         <button class="edit-button" onclick="toggleEditForm()">プロフィール編集</button>
 
         <div class="edit-form" id="editForm">
@@ -305,7 +327,8 @@ $conn->close();
     <textarea name="bio" id="bio" rows="4"><?php echo htmlspecialchars($user['bio']); ?></textarea>
 
     <label for="favorite_plans" class="section-title">お気に入りの旅行プラン:</label>
-    <textarea name="favorite_plans" id="favorite_plans" rows="4"><?php echo htmlspecialchars($user['favorite_plans']); ?></textarea>
+<textarea name="favorite_plans" id="favorite_plans" rows="4" readonly><?php echo htmlspecialchars($favorites_text); ?></textarea>
+
 
     <label for="profile_image">プロフィール画像:</label>
     <input type="file" name="profile_image" id="profile_image">
