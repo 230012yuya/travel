@@ -63,7 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // JSON を PHP の配列に変換
     if ($json) {
         $ai_plan = json_decode($json, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (json_last_error() === JSON_ERROR_NONE) {
+            // JSON データをセッションに保存して display.php にリダイレクト
+            session_start();
+            $_SESSION['ai_plan'] = $ai_plan;
+            header('Location: display.php');
+            exit();
+        } else {
             $error_message = "JSON の解析中にエラーが発生しました。";
         }
     } else {
