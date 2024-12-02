@@ -11,16 +11,27 @@ if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-$user_id = $_SESSION['user_id'];
-$plan_id = $_POST['plan_id'];
-$action = $_POST['action'];
+if (!isset($_SESSION['user_id'])) {
+    echo "エラー: ユーザーがログインしていません。";
+    exit;
+}
+
+if (!isset($_POST['plan_id']) || !isset($_POST['action'])) {
+    echo "エラー: 必要なデータが送信されていません。";
+    exit;
+}
+
+$user_id = $conn->real_escape_string($_SESSION['user_id']);
+$plan_id = $conn->real_escape_string($_POST['plan_id']);
+$action = $conn->real_escape_string($_POST['action']);
 
 if ($action === "add") {
-    // お気に入りに追加
     $sql = "INSERT INTO user_favorites (user_id, plan_id) VALUES ('$user_id', '$plan_id')";
 } elseif ($action === "remove") {
-    // お気に入りから削除
     $sql = "DELETE FROM user_favorites WHERE user_id='$user_id' AND plan_id='$plan_id'";
+} else {
+    echo "エラー: 不正な操作です。";
+    exit;
 }
 
 if ($conn->query($sql) === TRUE) {

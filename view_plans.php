@@ -195,29 +195,36 @@ $result = $conn->query($sql);
     </main>
 
     <script>
-        function confirmLogout() {
-            var confirmation = confirm("本当にログアウトしますか？");
-            if (confirmation) {
-                window.location.href = "logout.php";
+    function toggleFavorite(event, planId) {
+        event.preventDefault();
+        const button = document.getElementById(`favorite-btn-${planId}`);
+        const action = button.innerText === "追加" ? "add" : "remove";
+
+        // ボタンの見た目を即時変更
+        button.innerText = action === "add" ? "登録済み" : "追加";
+
+        fetch('add_favorite.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `plan_id=${planId}&action=${action}`
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes("エラー")) {
+                alert("エラーが発生しました: " + data);
+                // ボタン状態を元に戻す
+                button.innerText = action === "add" ? "追加" : "登録済み";
             }
-        }
+        })
+        .catch(error => {
+            console.error('エラー:', error);
+            alert("通信エラーが発生しました。");
+            // ボタン状態を元に戻す
+            button.innerText = action === "add" ? "追加" : "登録済み";
+        });
 
-        function toggleFavorite(event, planId) {
-            event.preventDefault();
-            const button = document.getElementById(`favorite-btn-${planId}`);
-            const action = button.innerText === "追加" ? "add" : "remove";
-            button.innerText = action === "add" ? "登録済み" : "追加";
-
-            fetch('add_favorite.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `plan_id=${planId}&action=${action}`
-            }).then(response => response.text()).then(data => {
-                console.log(data);
-            }).catch(error => console.error('エラー:', error));
-
-            return false;
-        }
-    </script>
+        return false;
+    }
+</script>
 </body>
 </html>
