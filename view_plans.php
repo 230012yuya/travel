@@ -195,6 +195,15 @@ $result = $conn->query($sql);
     </main>
 
     <script>
+
+        // ログアウト確認ダイアログ
+        function confirmLogout() {
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php"; // OKが押された場合はログアウト
+            }
+        }
+
     function toggleFavorite(event, planId) {
         event.preventDefault();
         const button = document.getElementById(`favorite-btn-${planId}`);

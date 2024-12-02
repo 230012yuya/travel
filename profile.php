@@ -324,9 +324,11 @@ $conn->close();
     </div>
 
     <script>
+        // ログアウト確認ダイアログ
         function confirmLogout() {
-            if (confirm("本当にログアウトしますか？")) {
-                window.location.href = "logout.php";
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php"; // OKが押された場合はログアウト
             }
         }
 
