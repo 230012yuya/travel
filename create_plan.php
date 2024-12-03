@@ -2,6 +2,45 @@
 // API キーを安全に格納 (例: 環境変数から取得)
 require_once 'env.php';
 
+function template()
+{
+    $template = '
+{
+        "plan": {
+            "departure_point": "xxxx",
+            "destination": "xxxx",
+            "start_date": "xxxx-xx-xx",
+            "end_date": "xxxx-xx-xx",
+            "details": "xxxxxxxxxxx",
+            "budget": "xxxxxx",
+            "number_of_people": 2
+        },
+        "plan_schedule": [
+            {
+                "day": 1,
+                "time": "xxxx-xx-xx xx:xx:xx",
+                "activity": "xxxx"
+            },
+            {
+                "day": 1,
+                "time": "xxxx-xx-xx xx:xx:xx",
+                "activity": "xxxx"
+            },
+            {
+                "day": 2,
+                "time": "xxxx-xx-xx xx:xx:xx",
+                "activity": "xxxx"
+            },
+            {
+                "day": 2,
+                "time": "xxxx-xx-xx xx:xx:xx",
+                "activity": "xxxx"
+            }
+        ]
+    }';
+    return $template;
+}
+
 // Gemini API 呼び出し関数
 function callGeminiAPI($prompt, $api_key)
 {
@@ -50,12 +89,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $num_people = htmlspecialchars($_POST['num_people']);
 
     // API 呼び出しのためのプロンプト作成
-    $prompt = "次の条件で旅行プランを作成し、JSONフォーマットのみでレスポンス（文章なし）:
+    $prompt = "次の条件で旅行プランを作成し、指定したJSONフォーマットのみでレスポンス（文章なし）:
         出発地点: $departure_point, 
         目的地: $destination, 
         日付: $start_date から $end_date, 
         予算: $budget 円, 
         人数: $num_people 人";
+    $prompt .= PHP_EOL;
+    $prompt .= "指定テンプレート";
+    $prompt .= template();
+    $prompt .= PHP_EOL;
 
     // Gemini API 呼び出し実行
     $json = callGeminiAPI($prompt, GEMINI_API_KEY);
