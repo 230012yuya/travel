@@ -112,7 +112,7 @@ foreach ($plan_schedules as $value) {
         <?php if ($ai_plan): ?>
             <p><strong>出発地:</strong> <?= htmlspecialchars($plan['departure_point']) ?></p>
             <p><strong>目的地:</strong> <?= htmlspecialchars($plan['destination']) ?></p>
-            <p><strong>旅行日程:</strong> <?= htmlspecialchars($plan['start_date']) ?> ～ <?= htmlspecialchars($plan['start_date']) ?></p>
+            <p><strong>旅行日程:</strong> <?= htmlspecialchars($plan['start_date']) ?> ～ <?= htmlspecialchars($plan['end_date']) ?></p>
             <p><strong>予算:</strong> <?= htmlspecialchars($plan['budget']) ?> 円</p>
             <p><strong>人数:</strong> <?= htmlspecialchars($plan['number_of_people']) ?> 人</p>
             <div class="schedule">
