@@ -6,7 +6,6 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// セッションから user_id を取得
 $user_id = $_SESSION['user_id'];
 
 $servername = "localhost";
@@ -14,13 +13,11 @@ $db_username = "root";
 $db_password = "";
 $dbname = "travel";
 
-// データベース接続
 $conn = new mysqli($servername, $db_username, $db_password, $dbname);
 if ($conn->connect_error) {
     die("接続失敗: " . $conn->connect_error);
 }
 
-// ユーザー情報を取得
 $sql = "SELECT * FROM user WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
@@ -28,41 +25,30 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-$profile_image = $user['profile_image'];
-
-// デフォルト画像のパス
+$profile_image = $user['profile_image'] ?: "kkrn_icon_user_6.png";
 $default_image = "kkrn_icon_user_6.png";
 
-// POSTリクエスト処理
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // **画像リセットの処理**
     if (isset($_POST['reset_image'])) {
         $profile_image = $default_image;
-
-        // データベースを更新してデフォルト画像にリセット
         $reset_sql = "UPDATE user SET profile_image = ? WHERE id = ?";
         $reset_stmt = $conn->prepare($reset_sql);
         $reset_stmt->bind_param("si", $profile_image, $user_id);
-
         if ($reset_stmt->execute()) {
             header("Location: profile.php");
-            exit; // 成功後リダイレクト
+            exit;
         } else {
             echo "画像リセットエラー: " . $conn->error;
         }
     }
 
-    // **プロフィール情報の更新**
-    $bio = $_POST['bio'] ?? '';
-    $favorite_plans = $_POST['favorite_plans'] ?? '';
+    $bio = trim($_POST['bio'] ?? '');
 
-    // プロフィール画像の処理
     if (!empty($_FILES['profile_image']['name'])) {
         $target_dir = "uploads/";
         $file_name = uniqid() . "_" . basename($_FILES["profile_image"]["name"]);
         $target_file = $target_dir . $file_name;
 
-        // ファイル形式の検証
         $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
         $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -77,10 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-        // ユーザー情報を更新
-    $update_sql = "UPDATE user SET bio = ?, favorite_plans = ?, profile_image = ? WHERE id = ?";
+    $update_sql = "UPDATE user SET bio = ?, profile_image = ? WHERE id = ?";
     $update_stmt = $conn->prepare($update_sql);
-    $update_stmt->bind_param("sssi", $bio, $favorite_plans, $profile_image, $user_id);
+    $update_stmt->bind_param("ssi", $bio, $profile_image, $user_id);
 
     if ($update_stmt->execute()) {
         header("Location: profile.php");
@@ -89,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "プロフィール更新エラー: " . $conn->error;
     }
 }
-// お気に入りプランを取得
+
 $query = "
     SELECT p.destination AS plan_name, p.details
     FROM user_favorites uf
@@ -295,7 +280,7 @@ $conn->close();
     </style>
 </head>
 <body>
-    <div class="navbar" id="myNavbar">
+    <div class="navbar">
         <a href="home.php">ホーム</a>
         <a href="create_plan.php">旅行プラン作成</a>
         <a href="display.php">旅行プラン表示</a>
@@ -304,66 +289,52 @@ $conn->close();
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
 
-    <div class="title">Traveeel</div>
-
     <div class="profile-container">
         <h1><?php echo htmlspecialchars($user['name']); ?>さんのプロフィール</h1>
-        <img id="profileImage" src="uploads/<?php echo htmlspecialchars($user['profile_image'] ?: 'image1.png'); ?>" alt="プロフィール画像">
-        <div class="section-title">自己紹介</div>
-        <p class="section-content"><?php echo htmlspecialchars($user['bio'] ?: '未設定'); ?></p>
-        <div class="section-title">お気に入りの旅行プラン</div>
-        <p class="section-content"><?php echo htmlspecialchars($user['favorite_plans'] ?: '未設定'); ?></p>
+        <img id="profileImage" src="uploads/<?php echo htmlspecialchars($profile_image); ?>" alt="プロフィール画像">
 
-        <div class="section-title">お気に入りの旅行プラン</div>
-        <textarea name="favorite_plans" id="favorite_plans" rows="4" readonly>
-<?php echo $favorites_text ?: 'お気に入りの旅行プランがまだ設定されていません。'; ?>
-        </textarea>
+        <div class="section">
+            <h2>自己紹介</h2>
+            <p><?php echo htmlspecialchars($user['bio'] ?: '未設定'); ?></p>
+        </div>
+
+        <div class="section">
+            <h2>お気に入りの旅行プラン</h2>
+            <pre><?php echo htmlspecialchars($favorites_text ?: 'お気に入りの旅行プランがまだ設定されていません。'); ?></pre>
+        </div>
 
         <button class="edit-button" onclick="toggleEditForm()">プロフィール編集</button>
 
         <div class="edit-form" id="editForm">
-        <form action="profile.php" method="POST" enctype="multipart/form-data">
-    <label for="bio" class="section-title">自己紹介:</label>
-    <textarea name="bio" id="bio" rows="4"><?php echo htmlspecialchars($user['bio']); ?></textarea>
+            <form action="profile.php" method="POST" enctype="multipart/form-data">
+                <label for="bio">自己紹介:</label>
+                <textarea name="bio" id="bio" rows="4"><?php echo htmlspecialchars($user['bio']); ?></textarea>
 
-    <label for="favorite_plans" class="section-title">お気に入りの旅行プラン:</label>
-<textarea name="favorite_plans" id="favorite_plans" rows="4" readonly><?php echo htmlspecialchars($favorites_text); ?></textarea>
+                <label for="profile_image">プロフィール画像:</label>
+                <input type="file" name="profile_image" id="profile_image">
 
+                <input type="submit" value="更新する">
+            </form>
 
-    <label for="profile_image">プロフィール画像:</label>
-    <input type="file" name="profile_image" id="profile_image">
-
-    <input type="submit" value="更新する">
-</form>
-
-<form action="profile.php" method="POST" style="margin-top: 10px;">
-    <input type="hidden" name="reset_image" value="1">
-    <button type="submit" class="reset-button">画像をリセット</button>
-</form>
-
+            <form action="profile.php" method="POST">
+                <input type="hidden" name="reset_image" value="1">
+                <button type="submit" class="reset-button">画像をリセット</button>
+            </form>
         </div>
-
-        <p class="error-message" id="errorMessage" style="display: none;">エラーが発生しました。もう一度試してください。</p>
     </div>
 
     <script>
+        // ログアウト確認ダイアログ
         function confirmLogout() {
-            if (confirm("本当にログアウトしますか？")) {
-                window.location.href = "logout.php";
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php"; // OKが押された場合はログアウト
             }
         }
 
         function toggleEditForm() {
             const form = document.getElementById('editForm');
             form.style.display = form.style.display === 'block' ? 'none' : 'block';
-            if (form.style.display === 'block') {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function resetProfileImage() {
-            const imgElement = document.getElementById('profileImage');
-            imgElement.src = 'images/kkrn_icon_user_6.png'; // デフォルト画像
         }
     </script>
 </body>

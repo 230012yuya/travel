@@ -222,6 +222,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <pre><?= htmlspecialchars(json_encode($ai_plan, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) ?></pre>
         <?php endif; ?>
     </div>
+    <script>
+        // ログアウト確認ダイアログ
+        function confirmLogout() {
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php"; // OKが押された場合はログアウト
+            }
+        }
+    </script>
 </body>
-
 </html>
