@@ -168,8 +168,6 @@ $result = $conn->query($sql);
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
 
-    <div class="title">Traveeel</div>
-
     <main>
         <h1>旅行プラン一覧</h1>
         <ul>

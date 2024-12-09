@@ -151,6 +151,15 @@ try {
         <a href="view_plans.php">過去の旅行プラン</a>
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
+    <script>
+        // ログアウト確認ダイアログ
+        function confirmLogout() {
+            var confirmation = confirm("本当にログアウトしますか？");
+            if (confirmation) {
+                window.location.href = "logout.php"; // OKが押された場合はログアウト
+            }
+        }
+    </script>
 </body>
 </html>
 

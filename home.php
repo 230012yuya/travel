@@ -137,9 +137,6 @@
         <a href="view_plans.php">過去の旅行プラン</a>
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
-
-    <!-- Traveeelのタイトル -->
-    <div class="title">Traveeel</div>
     
     <main>
         <h1>ホーム</h1>
