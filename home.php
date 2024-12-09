@@ -6,127 +6,137 @@
     <title>ホーム</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f9ff; /* 柔らかいパステルブルー */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f9ff; /* 柔らかいパステルブルー */
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-        .navbar {
-            overflow: hidden;
-            background-color: rgba(50, 50, 70, 0.9); /* 少し濃い目の背景 */
-            padding: 0 15px;
-            font-size: 18px;
-        }
+    .navbar {
+        overflow: hidden;
+        background-color: rgba(50, 50, 70, 0.9); /* 少し濃い目の背景 */
+        padding: 0 15px;
+        font-size: 18px;
+    }
 
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-        }
+    .navbar a {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 20px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    }
 
-        .navbar a:hover {
-            background-color: #ffb6b9; /* 柔らかいピンク */
-            color: #fff;
-            transform: scale(1.05); /* ホバー時の動き */
-        }
+    .navbar a:hover {
+        background-color: #ffb6b9; /* 柔らかいピンク */
+        color: #fff;
+        transform: scale(1.05); /* ホバー時の動き */
+    }
 
-        /* Traveeelタイトル */
-        .title {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 50px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bc9ff);
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
+    .title {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 50px;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bc9ff);
+        -webkit-background-clip: text;
+        color: transparent;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
 
-        .title:hover {
-            transform: scale(1.1) rotate(5deg);
-        }
+    .title:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
 
-        main {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9); /* 柔らかい白背景 */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
+    main.hero-section {
+        position: relative;
+        background: linear-gradient(to bottom right, #ff6b6b, #ffd93d, #6bc9ff); /* カラフルな背景グラデーション */
+        color: white;
+        text-align: center;
+        padding: 100px 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
 
-        h1 {
-            font-size: 32px;
-            color: #3a506b; /* 落ち着いた青 */
-            margin-bottom: 20px;
-        }
+    .hero-section .hero-content h1 {
+        font-size: 60px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
 
-        form {
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 10px; /* 要素間の間隔を設定 */
-        }
+    .hero-section .hero-content p {
+        font-size: 20px;
+        margin-bottom: 30px;
+        font-weight: 300;
+    }
 
-        input[type="text"] {
-            width: calc(100% - 140px);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #ffb6b9; /* カラフルさをプラス */
-            margin-right: 10px;
-            font-size: 18px;
-            color: #333;
-        }
+    .hero-section form {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* 要素間の間隔を設定 */
+        margin-bottom: 30px;
+    }
 
-        button {
-            padding: 15px 30px;
-            background-color: #ff6b6b; /* カラフルな赤 */
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-        }
+    .hero-section input[type="text"] {
+        width: 300px;
+        max-width: 100%;
+        padding: 15px;
+        border-radius: 50px; /* 丸みを帯びたデザイン */
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        font-size: 18px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transition: all 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #ffd93d; /* 明るい黄色に変更 */
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+    .hero-section input[type="text"]::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
 
-        button:active {
-            background-color: #ff6b6b;
-            transform: scale(1.02);
-        }
+    .hero-section input[type="text"]:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.4);
+        color: white;
+    }
 
-        /* 不要なボタンを削除 */
-        .navbar .icon {
-            display: none;
-        }
+    .hero-section button {
+        padding: 15px 30px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
 
-        @media screen and (max-width: 768px) {
-            input[type="text"] {
-                width: calc(100% - 160px);
-            }
-        }
+    .hero-section button:hover {
+        background-color: white;
+        color: rgba(0, 0, 0, 0.8);
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
 
-    </style>
+    .hero-section .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 20px; /* ボタン間のスペース */
+        margin-top: 20px;
+    }
+</style>
+
 </head>
 <body>
     <div class="navbar" id="myNavbar">
@@ -138,14 +148,19 @@
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
     
-    <main>
-        <h1>ホーム</h1>
+    <main class="hero-section">
+    <div class="hero-content">
+        <h1>ようこそ、Traveeelへ！</h1>
+        <p>新しい旅行プランを作成し、オリジナルのプランを計画しましょう。</p>
         <form action="search_results.php" method="post">
-            <input type="text" name="search" placeholder="プランを検索" style="margin-right: 10px;">
+            <input type="text" name="search" placeholder="プランまたはキーワードを入力">
             <button type="submit">検索</button>
         </form>
-        <button onclick="window.location.href='create_plan.php'">新しいプランを作成する</button>
-    <button onclick="window.location.href='view_plans.php'">過去の旅行プランを見る</button>
+        <div class="button-group">
+            <button onclick="window.location.href='create_plan.php'">新しいプランを作成する</button>
+            <button onclick="window.location.href='view_plans.php'">過去の旅行プランを見る</button>
+        </div>
+    </div>
 </main>
 
 
