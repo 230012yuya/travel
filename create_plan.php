@@ -130,13 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>旅行プラン作成</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* CSS スタイル */
-        body {
-            font-family: 'Roboto', sans-serif;
+         body {
+            font-family: 'Lora', serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f9ff;
-            color: #333;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* グラデーション背景 */
+            background-size: cover;
+            color: #fff;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -144,9 +144,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .navbar {
             overflow: hidden;
-            background-color: rgba(50, 50, 70, 0.9);
-            padding: 0 15px;
+            background-color: rgba(0, 0, 50, 0.8);
+            padding: 0 20px;
             font-size: 18px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
 
         .navbar a {
@@ -154,70 +158,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: block;
             color: white;
             text-align: center;
-            padding: 14px 20px;
+            padding: 16px 20px;
             text-decoration: none;
             font-weight: bold;
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .navbar a:hover {
-            background-color: #ffb6b9;
-            color: #fff;
+            background-color: #6ec1e4;
             transform: scale(1.05);
         }
 
         .form-container {
-            max-width: 800px;
-            margin: 50px auto;
+            max-width: 900px;
+            width: 90%;
+            margin: 120px auto; /* ナビゲーションバーの下に余白を追加 */
             padding: 30px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            color: #333;
         }
 
         h1 {
             text-align: center;
-            color: #ff6b6b;
+            color: #007BFF;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-family: 'Roboto', sans-serif;
         }
 
         label {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin: 5px 0 20px;
+            padding: 12px;
+            margin: 10px 0;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            outline: none;
         }
 
         button {
             width: 100%;
             padding: 15px;
-            background-color: #ff6b6b;
+            background: linear-gradient(135deg, #28a745, #218838);
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 18px;
             cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
         }
 
         button:hover {
-            background-color: #ff3b3b;
+            background: linear-gradient(135deg, #218838, #28a745);
+            transform: translateY(-3px);
         }
 
-        .error-message {
-            color: red;
-            text-align: center;
-            font-size: 16px;
+        @media (max-width: 768px) {
+            .form-container {
+                max-width: 100%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="navbar" id="myNavbar">
+    <div class="navbar">
         <a href="home.php">ホーム</a>
         <a href="create_plan.php">旅行プラン作成</a>
         <a href="display.php">旅行プラン表示</a>
@@ -226,39 +249,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="javascript:void(0);" onclick="confirmLogout()">ログアウト</a>
     </div>
     <div class="form-container">
-        <h1>旅行プラン作成</h1>
-        <form action="create_plan.php" method="post">
-            <div>
-                <label for="departure_point">出発地点:</label>
-                <input type="text" id="departure_point" name="departure_point" required>
-            </div>
-            <div>
-                <label for="destination">目的地:</label>
-                <input type="text" id="destination" name="destination" required>
-            </div>
-            <div>
-                <label for="start_date">開始日:</label>
-                <input type="date" id="start_date" name="start_date" required>
-            </div>
-            <div>
-                <label for="end_date">終了日:</label>
-                <input type="date" id="end_date" name="end_date" required>
-            </div>
-            <div>
-                <label for="budget">予算 (円):</label>
-                <input type="number" id="budget" name="budget" required>
-            </div>
-            <div>
-                <label for="num_people">人数:</label>
-                <input type="number" id="num_people" name="num_people" required>
-            </div>
-            <button type="submit">プランを作成</button>
-        </form>
+    <h1>旅行プラン作成</h1>
+    <form action="create_plan.php" method="post">
+        <label for="departure_point">出発地点:</label>
+        <input type="text" id="departure_point" name="departure_point" required>
+        <label for="destination">目的地:</label>
+        <input type="text" id="destination" name="destination" required>
+        <label for="start_date">開始日:</label>
+        <input type="date" id="start_date" name="start_date" required>
+        <label for="end_date">終了日:</label>
+        <input type="date" id="end_date" name="end_date" required>
+        <label for="budget">予算 (円):</label>
+        <input type="number" id="budget" name="budget" required>
+        <label for="num_people">人数:</label>
+        <input type="number" id="num_people" name="num_people" required>
+        <button type="submit">プランを作成</button>
+    </form>
 
-        <?php if (isset($error_message)): ?>
-            <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
-        <?php endif; ?>
-
+    <?php if (!empty($error_message)): ?>
+        <p style="color: red; text-align: center;"><?= htmlspecialchars($error_message) ?></p>
+    <?php endif; ?>
         <!-- Gemini の結果 -->
         <?php if (isset($ai_plan)): ?>
             <h2>生成された旅行プラン</h2>
