@@ -27,18 +27,23 @@ foreach ($plan_schedules as $value) {
     <title>旅行プラン表示</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Lora', serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
+            background: linear-gradient(to right, #6a11cb, #2575fc); /* グラデーション背景 */
+            color: #000;
         }
 
         .navbar {
             overflow: hidden;
             background-color: rgba(50, 50, 70, 0.9);
-            padding: 0 15px;
+            padding: 0 20px;
             font-size: 18px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
 
         .navbar a {
@@ -49,27 +54,31 @@ foreach ($plan_schedules as $value) {
             padding: 14px 20px;
             text-decoration: none;
             font-weight: bold;
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .navbar a:hover {
             background-color: #ffb6b9;
-            color: #fff;
             transform: scale(1.05);
         }
 
         .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 90%;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         h1 {
             text-align: center;
             color: #333;
+            font-size: 36px;
+            font-family: 'Roboto', sans-serif;
+            margin-bottom: 20px;
         }
 
         .error {
@@ -78,23 +87,47 @@ foreach ($plan_schedules as $value) {
         }
 
         .schedule {
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .day {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
         }
 
         .activity {
             margin-left: 20px;
-            padding: 10px;
-            border-left: 3px solid #007bff;
-            margin-bottom: 10px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
         }
 
         .activity p {
             margin: 5px 0;
+            font-size: 16px;
         }
+
+        .save-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, #218838, #28a745);
+            transform: translateY(-3px);
+        }
+
     </style>
 </head>
 

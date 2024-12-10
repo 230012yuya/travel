@@ -108,7 +108,7 @@ $conn->close();
             background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #84fab0, #8fd3f4);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            color: #333;
+            color: #000; /* 文字の色を黒に設定 */
             display: flex;
             flex-direction: column;
             align-items: center;
