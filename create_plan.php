@@ -90,16 +90,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // API 呼び出しのためのプロンプト作成
     $prompt = "次の条件で旅行プランを作成し、指定したJSONフォーマットのみでレスポンス（文章なし）:
-        出発地点: $departure_point, 
-        目的地: $destination, 
-        日付: $start_date から $end_date, 
-        予算: $budget 円, 
-        人数: $num_people 人";
+    出発地点: $departure_point, 
+    目的地: $destination, 
+    日付: $start_date から $end_date, 
+    予算: $budget 円, 
+    人数: $num_people 人,
+    各日のスケジュールには以下の詳細を含めてください:
+    - 昼食: 具体的な店名とその場所を含める
+    - 夕食: 具体的な店名とその場所を含める
+    - 宿泊先: 具体的なホテルまたは旅館の名前と住所を含める
+    レスポンスはテンプレートに従ってください。";
     $prompt .= PHP_EOL;
-    $prompt .= "指定テンプレート";
+    $prompt .= "指定テンプレート:";
     $prompt .= template();
     $prompt .= PHP_EOL;
-
     // Gemini API 呼び出し実行
     $json = callGeminiAPI($prompt, GEMINI_API_KEY);
 
