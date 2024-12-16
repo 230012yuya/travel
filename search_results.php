@@ -108,7 +108,7 @@ $result = $conn->query($sql);
                     echo "<strong>目的地:</strong> " . htmlspecialchars($row['destination']) . "<br>";
                     echo "<strong>日程:</strong> " . htmlspecialchars($row['start_date']) . " ~ " . htmlspecialchars($row['end_date']) . "<br>";
                     echo "<strong>人数:</strong> " . htmlspecialchars($row['number_of_people']) . "人<br>";
-                    echo "<strong>予算:</strong> ¥" . number_format($row['budget'], 2) . "<br>";
+                    echo "<strong>予算:</strong> ¥" . number_format($row['budget']).'円' . "<br>";
                     echo "<a href='plan_detail.php?plan_id=" . $row['id'] . "'>詳細を見る</a>";
                     echo "</li>";
                 }
