@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Lora', serif;
         margin: 0;
         padding: 0;
         background-color: #f0f9ff; /* 柔らかいパステルブルー */

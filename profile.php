@@ -102,7 +102,7 @@ $conn->close();
     <title>プロフィールページ</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Lora', serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #84fab0, #8fd3f4);
