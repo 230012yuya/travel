@@ -1,2 +1,2 @@
 <?php
-const GEMINI_API_KEY = 'AIzaSyDyj9zK6XXeGbRDBjpXS42Qk57WcqI6AjY';
+const GEMINI_API_KEY = 'AIzaSyBm4rDY29N4R-U20-hBJ4tA45wxg2z9Lv4';
