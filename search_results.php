@@ -17,7 +17,8 @@ $sql = "SELECT * FROM plans WHERE
         departure_point LIKE '%$search_query%' OR 
         destination LIKE '%$search_query%' OR 
         number_of_people LIKE '%$search_query%' OR 
-        budget LIKE '%$search_query%'";
+        budget LIKE '%$search_query%'OR
+        keywords LIKE '%$search_query%'"; 
 
 $result = $conn->query($sql);
 ?>
@@ -109,6 +110,7 @@ $result = $conn->query($sql);
                     echo "<strong>日程:</strong> " . htmlspecialchars($row['start_date']) . " ~ " . htmlspecialchars($row['end_date']) . "<br>";
                     echo "<strong>人数:</strong> " . htmlspecialchars($row['number_of_people']) . "人<br>";
                     echo "<strong>予算:</strong> ¥" . number_format($row['budget']).'円' . "<br>";
+                    echo "<strong>キーワード:</strong> " . htmlspecialchars($row['keywords']) . "<br>";
                     echo "<a href='plan_detail.php?plan_id=" . $row['id'] . "'>詳細を見る</a>";
                     echo "</li>";
                 }

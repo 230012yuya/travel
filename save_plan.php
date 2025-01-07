@@ -24,8 +24,8 @@ try {
 
     // トランザクションを開始
     $pdo->beginTransaction();
-    $stmt = $pdo->prepare("INSERT INTO plans (user_id, departure_point, destination, start_date, end_date, details, budget, number_of_people)
-        VALUES (:user_id, :departure_point, :destination, :start_date, :end_date, :details, :budget, :number_of_people)");
+    $stmt = $pdo->prepare("INSERT INTO plans (user_id, departure_point, destination, start_date, end_date, details, budget, number_of_people, keywords)
+        VALUES (:user_id, :departure_point, :destination, :start_date, :end_date, :details, :budget, :number_of_people, :keywords)");
     $stmt->execute($plan);
 
     // 新しく作成されたplanのIDを取得

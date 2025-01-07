@@ -13,7 +13,8 @@ function template()
             "end_date": "xxxx-xx-xx",
             "details": "xxxxxxxxxxx",
             "budget": "xxxxxx",
-            "number_of_people": 2
+            "number_of_people": 2,
+            "keywords": "xxxxxx"
         },
         "plan_schedule": [
             {
@@ -87,14 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $end_date = htmlspecialchars($_POST['end_date']);
     $budget = htmlspecialchars($_POST['budget']);
     $num_people = htmlspecialchars($_POST['num_people']);
+    $keywords = htmlspecialchars($_POST['keywords']); // キーワードを取得
 
-    // API 呼び出しのためのプロンプト作成
+    // プロンプトの作成
     $prompt = "次の条件で旅行プランを作成し、指定したJSONフォーマットのみでレスポンス（文章なし）:
     出発地点: $departure_point, 
     目的地: $destination, 
     日付: $start_date から $end_date, 
     予算: $budget 円, 
     人数: $num_people 人,
+    キーワード: $keywords,
     各日のスケジュールには以下の詳細を含めてください:
     - 昼食: 具体的な店名とその場所を含める
     - 夕食: 具体的な店名とその場所を含める
@@ -104,14 +107,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prompt .= "指定テンプレート:";
     $prompt .= template();
     $prompt .= PHP_EOL;
+
     // Gemini API 呼び出し実行
     $json = callGeminiAPI($prompt, GEMINI_API_KEY);
 
-    // JSON を PHP の配列に変換
     if ($json) {
         $ai_plan = json_decode($json, true);
         if (json_last_error() === JSON_ERROR_NONE) {
-            // JSON データをセッションに保存して display.php にリダイレクト
             session_start();
             $_SESSION['ai_plan'] = $ai_plan;
             header('Location: display.php');
@@ -123,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "API 呼び出しに失敗しました。";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -255,20 +258,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="form-container">
     <h1>旅行プラン作成</h1>
     <form action="create_plan.php" method="post">
-        <label for="departure_point">出発地点:</label>
-        <input type="text" id="departure_point" name="departure_point" required>
-        <label for="destination">目的地:</label>
-        <input type="text" id="destination" name="destination" required>
-        <label for="start_date">開始日:</label>
-        <input type="date" id="start_date" name="start_date" required>
-        <label for="end_date">終了日:</label>
-        <input type="date" id="end_date" name="end_date" required>
-        <label for="budget">予算 (円):</label>
-        <input type="number" id="budget" name="budget" required>
-        <label for="num_people">人数:</label>
-        <input type="number" id="num_people" name="num_people" required>
-        <button type="submit">プランを作成</button>
-    </form>
+    <label for="departure_point">出発地点:</label>
+    <input type="text" id="departure_point" name="departure_point" required>
+    
+    <label for="destination">目的地:</label>
+    <input type="text" id="destination" name="destination" required>
+    
+    <label for="start_date">開始日:</label>
+    <input type="date" id="start_date" name="start_date" required>
+    
+    <label for="end_date">終了日:</label>
+    <input type="date" id="end_date" name="end_date" required>
+    
+    <label for="budget">予算 (円):</label>
+    <input type="number" id="budget" name="budget" required>
+    
+    <label for="num_people">人数:</label>
+    <input type="number" id="num_people" name="num_people" required>
+
+    <label for="keywords">キーワード:</label>
+    <input type="text" id="keywords" name="keywords" placeholder="例: 富士山, 温泉" required>
+    
+    <button type="submit">プランを作成</button>
+</form>
+
 
     <?php if (!empty($error_message)): ?>
         <p style="color: red; text-align: center;"><?= htmlspecialchars($error_message) ?></p>
